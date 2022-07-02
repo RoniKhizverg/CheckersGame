@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "p3D++ARNKvIhAhf52otNiklTOT1Og8IwAvZxmHGRRQsfWD1usPV6jdaoL8KbRBDXFkAfUeYY7QlRak2F+xQkjA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\oramr\\.nuget\\packages\\microsoft.aspnetcore.authentication.negotiate\\6.0.4\\microsoft.aspnetcore.authentication.negotiate.6.0.4.nupkg.sha512",
+    "C:\\Users\\oramr\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\6.0.4\\microsoft.aspnetcore.connections.abstractions.6.0.4.nupkg.sha512",
+    "C:\\Users\\oramr\\.nuget\\packages\\microsoft.extensions.features\\6.0.4\\microsoft.extensions.features.6.0.4.nupkg.sha512",
+    "C:\\Users\\oramr\\.nuget\\packages\\system.directoryservices.protocols\\6.0.1\\system.directoryservices.protocols.6.0.1.nupkg.sha512",
+    "C:\\Users\\oramr\\.nuget\\packages\\system.io.pipelines\\6.0.2\\system.io.pipelines.6.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
