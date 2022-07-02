@@ -21,12 +21,12 @@ namespace Client
         int currentPlayer;
 
         List<PictureBox> simpleSteps = new List<PictureBox>();
-
+        int server = 0;
         int countEatSteps = 0;
         PictureBox prevButton;
         PictureBox pressedButton;
         bool isContinue = false;
-
+        bool endGame = false;
         bool isMoving;
 
         int[,] map = new int[mapSize, mapSize];
@@ -38,8 +38,8 @@ namespace Client
         Image blackCheatFigure;
         Image whiteCheatFigure;
         Random srand = new Random();
-        bool isServerTurn; 
-
+        bool isServerTurn;
+        bool serverStart = false;
         public WinForm winform;
 
         public checkersBoard(Player pl)
@@ -51,9 +51,7 @@ namespace Client
             blackFigure = Properties.Resources.blackSoldier;
             blackCheatFigure = Properties.Resources.cheat;
             whiteCheatFigure = Properties.Resources.whiteCheat;
-            nameTextBox1.Text = pl.UserName;
-            nameTextBox2.Text = "server";
-            textBox3.Text = pl.NumOfGames.ToString();
+           
             this.startButton.Visible = true;
 
 
@@ -64,11 +62,37 @@ namespace Client
 
         public void Init()
         {
+            endGame = false;
             eatenBlack = 0;
             eatenWhite = 0;
             this.ScoreLableBlack.Text = eatenBlack.ToString();
             this.ScoreLableWhite.Text = eatenWhite.ToString();
-            currentPlayer = 1;
+            currentPlayer = srand.Next(1,3);
+            if (currentPlayer == 1)
+                server = 2;
+            else
+                server = 1;
+            if (server == 2)
+            {
+                nameTextBox2.Text = "server";
+                nameTextBox1.Text = player.UserName;
+                textBox3.Text = player.NumOfGames.ToString();
+                label3.Visible = false;
+                textBox1.Visible = false;
+
+            }
+            else
+            {
+                nameTextBox1.Text = "Server";
+                nameTextBox2.Text = player.UserName;
+                textBox1.Text = player.NumOfGames.ToString();
+                label4.Visible = false;
+                textBox3.Visible = false;
+
+
+
+            }
+
             isMoving = false;
             prevButton = null;
 
@@ -95,29 +119,31 @@ namespace Client
             {
                 for (int j = 0; j < mapSize; j++)
                 {
-                    if (map[i, j] == 1)
+                    if (map[i, j] != server && map[i, j] != 0 )
                         player1 = true;
-                    if (map[i, j] == 2)
+                    if (map[i, j] == server)
                         player2 = true;
                 }
             }
             if (!player2)
             {
+                endGame = true;
                 winform = new WinForm(player);
                 winform.decalreTheWinner(player.UserName);
                 winform.Show();
-                this.Close();
+                this.Visible = false;
             }
             if (!player1)
             {
+                endGame = true;
                 winform = new WinForm(player);
                 winform.decalreTheWinner("server");
                 winform.Show();
-                this.Close();
+                this.Visible = false;
 
             }
 
-           
+
 
         }
 
@@ -161,7 +187,7 @@ namespace Client
             EventArgs e = new EventArgs();
             PictureBox p2 = new PictureBox();
 
-            if (currentPlayer == 2)
+            if (currentPlayer == server )
             {
 
                 do
@@ -170,9 +196,9 @@ namespace Client
                     int j = srand.Next(0, mapSize);
                     PictureBox p = new PictureBox();
                     p = buttons[i, j];
-                    OnFigurePress(p, e);
-                    if (buttons[i, j].Enabled == true)
+                    if (p.Enabled == true)
                     {
+                        OnFigurePress(p, e);
                         for (int x = 0; x < mapSize; x++)
                         {
                             for (int y = 0; y < mapSize; y++)
@@ -182,15 +208,18 @@ namespace Client
                                     p2 = buttons[x, y];
                                     OnFigurePress(p2, e);
                                     canMoove = 1;
+                                    x = 0;
+                                    y = 0;
                                 }
 
                             }
                         }
-                    }
-                    if (canMoove == 0)
-                    {
-                        OnFigurePress(p, e);
 
+                        if (canMoove == 0)
+                        {
+                            OnFigurePress(p, e);
+
+                        }
                     }
 
 
@@ -290,6 +319,8 @@ namespace Client
                       
 
                     }
+                    if(currentPlayer == server)
+                        System.Threading.Thread.Sleep(1000);
                     int temp = map[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button
                     
                     //like swap -> update the new position of the soldier.
@@ -318,8 +349,9 @@ namespace Client
                         ShowPossibleSteps();
                         isContinue = false;
                         prevButton = pressedButton;
-                        checkIfServerTurn();
-                        if (currentPlayer == 2)
+                        if(!endGame)
+                            checkIfServerTurn();
+                        if (currentPlayer == server)
                             isServerTurn = true;
                         
 
@@ -352,7 +384,8 @@ namespace Client
                     {
                         if (buttons[i, j].Text == "D")
                             isOneStep = false;
-                        else isOneStep = true;
+                        else
+                            isOneStep = true;
                         if (IsButtonHasEatStep(i, j, isOneStep, new int[2] { 0, 0 }))
                         {
                             isEatStep = true;
@@ -362,7 +395,10 @@ namespace Client
                 }
             }
             if (!isEatStep)
+            {
                 ActivateAllButtons();
+
+            }
         }
 
         public void SwitchButtonToCheat(PictureBox button)
@@ -757,6 +793,13 @@ namespace Client
         {
             ActivateAllButtons();
             this.startButton.Visible = false;
+            if (currentPlayer == 2)
+            {
+                currentPlayer = server;
+                checkIfServerTurn();
+            }
         }
+
+        
     }
 }

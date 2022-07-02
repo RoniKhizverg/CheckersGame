@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "p3D++ARNKvIhAhf52otNiklTOT1Og8IwAvZxmHGRRQsfWD1usPV6jdaoL8KbRBDXFkAfUeYY7QlRak2F+xQkjA==",
+  "dgSpecHash": "2zRGi4bBk9GmHysuHEvJwkODP8yADKeypaYxHB3t+57D0Vw0q/87hOj9rCiSeanlZ/LW5vLNApBDz6w8cq3+eQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\Server.csproj",
+  "projectFilePath": "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Checkers\\Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\oramr\\.nuget\\packages\\microsoft.aspnetcore.authentication.negotiate\\6.0.4\\microsoft.aspnetcore.authentication.negotiate.6.0.4.nupkg.sha512",
     "C:\\Users\\oramr\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\6.0.4\\microsoft.aspnetcore.connections.abstractions.6.0.4.nupkg.sha512",

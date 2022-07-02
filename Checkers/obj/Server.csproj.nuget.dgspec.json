@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\Server.csproj": {}
+    "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Checkers\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\Server.csproj": {
+    "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Checkers\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Checkers\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\Server.csproj",
+        "projectPath": "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Checkers\\Server.csproj",
         "packagesPath": "C:\\Users\\oramr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\oramr\\source\\repos\\Checkers\\Checkers\\obj\\",
+        "outputPath": "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Checkers\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

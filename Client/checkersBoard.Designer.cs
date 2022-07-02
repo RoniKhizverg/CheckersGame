@@ -41,6 +41,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -137,6 +139,7 @@
             this.nameTextBox1.ForeColor = System.Drawing.Color.Maroon;
             this.nameTextBox1.Location = new System.Drawing.Point(721, 305);
             this.nameTextBox1.Name = "nameTextBox1";
+            this.nameTextBox1.ReadOnly = true;
             this.nameTextBox1.Size = new System.Drawing.Size(239, 25);
             this.nameTextBox1.TabIndex = 8;
             // 
@@ -146,10 +149,10 @@
             this.nameTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.nameTextBox2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nameTextBox2.ForeColor = System.Drawing.Color.Maroon;
-            this.nameTextBox2.Location = new System.Drawing.Point(721, 126);
+            this.nameTextBox2.Location = new System.Drawing.Point(692, 126);
             this.nameTextBox2.Name = "nameTextBox2";
             this.nameTextBox2.ReadOnly = true;
-            this.nameTextBox2.Size = new System.Drawing.Size(239, 25);
+            this.nameTextBox2.Size = new System.Drawing.Size(259, 25);
             this.nameTextBox2.TabIndex = 9;
             // 
             // label1
@@ -176,7 +179,7 @@
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.Color.Maroon;
-            this.textBox3.Location = new System.Drawing.Point(721, 327);
+            this.textBox3.Location = new System.Drawing.Point(712, 342);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(197, 25);
@@ -185,11 +188,32 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(609, 333);
+            this.label4.Location = new System.Drawing.Point(609, 348);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(97, 16);
             this.label4.TabIndex = 15;
             this.label4.Text = "Num of games:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(609, 165);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(97, 16);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Num of games:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.ForeColor = System.Drawing.Color.Maroon;
+            this.textBox1.Location = new System.Drawing.Point(712, 159);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(197, 25);
+            this.textBox1.TabIndex = 17;
             // 
             // checkersBoard
             // 
@@ -197,6 +221,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(979, 629);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label2);
@@ -238,5 +264,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

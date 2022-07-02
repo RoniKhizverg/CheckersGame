@@ -38,5 +38,7 @@ namespace Client
         {
             this.Close();
         }
+
+        
     }
 }

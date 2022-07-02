@@ -49,10 +49,12 @@
             // 
             // textBox1
             // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Font = new System.Drawing.Font("Century Gothic", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(245, 237);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(536, 41);
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(536, 34);
             this.textBox1.TabIndex = 1;
             // 
             // closeButton
