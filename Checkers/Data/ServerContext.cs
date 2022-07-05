@@ -15,5 +15,7 @@ namespace Server.Data
         }
 
         public DbSet<Server.Model.TblUsers>? TblUsers { get; set; }
+
+        public DbSet<Server.Model.TblGames>? TblGames { get; set; }
     }
 }

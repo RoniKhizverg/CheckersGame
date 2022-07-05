@@ -12,6 +12,7 @@ namespace Client
 {
     public partial class checkersBoard : Form
     {
+        GamesDataContext gc = new GamesDataContext();
         
         const int mapSize = 8;
         const int cellSize = 55;
@@ -800,6 +801,9 @@ namespace Client
             }
         }
 
-        
+        private void checkersBoard_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

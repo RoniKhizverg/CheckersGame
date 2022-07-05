@@ -1,5 +1,5 @@
 ﻿@page
-@model Server.Pages.Users.EditModel
+@model Server.Users.EditModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -28,6 +28,11 @@
                 <label asp-for="TblUsers.NumOfGames" class="control-label"></label>
                 <input asp-for="TblUsers.NumOfGames" class="form-control" />
                 <span asp-validation-for="TblUsers.NumOfGames" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TblUsers.PhoneNumber" class="control-label"></label>
+                <input asp-for="TblUsers.PhoneNumber" class="form-control" />
+                <span asp-validation-for="TblUsers.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

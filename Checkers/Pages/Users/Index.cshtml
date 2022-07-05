@@ -1,5 +1,5 @@
 ﻿@page
-@model Server.Pages.Users.IndexModel
+@model Server.Users.IndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -22,6 +22,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.TblUsers[0].NumOfGames)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TblUsers[0].PhoneNumber)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -36,6 +39,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NumOfGames)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

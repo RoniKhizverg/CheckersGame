@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Model;
 
-namespace Server.Pages.Users
+namespace Server.Users
 {
     public class EditModel : PageModel
     {

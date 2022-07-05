@@ -19,6 +19,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ServerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ServerContext") ?? throw new InvalidOperationException("Connection string 'ServerContext' not found.")));
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,5 +1,5 @@
 ﻿@page
-@model Server.Pages.Users.DeleteModel
+@model Server.Users.DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -29,6 +29,12 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TblUsers.NumOfGames)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TblUsers.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TblUsers.PhoneNumber)
         </dd>
     </dl>
     

@@ -35,3 +35,5 @@ C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.Gene
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.exe
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.pdb
+C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\gamedb.mdf
+C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\gamedb_log.ldf
