@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Client.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,13 +14,17 @@ namespace Client
 {
     public partial class checkersBoard : Form
     {
-        GamesDataContext gc = new GamesDataContext();
-        
+        GamesDataContext _context = new GamesDataContext();
+        private static HttpClient client = new HttpClient();
+        private const string BaseUrl = "https://localhost:44359/";
         const int mapSize = 8;
         const int cellSize = 55;
         int eatenBlack = 0;
         int eatenWhite = 0;
         Player player;
+        Game gameRestore = null;
+        private bool restoreGame = false;
+
         int currentPlayer;
 
         List<PictureBox> simpleSteps = new List<PictureBox>();
@@ -41,6 +47,7 @@ namespace Client
         Random srand = new Random();
         bool isServerTurn;
         public WinForm winform;
+        private string winner;
 
         public checkersBoard(Player pl)
         {
@@ -50,10 +57,10 @@ namespace Client
              whiteFigure = Properties.Resources.whiteSoldier;
             blackFigure = Properties.Resources.blackSoldier;
             blackCheatFigure = Properties.Resources.cheat;
-            whiteCheatFigure = Properties.Resources.whiteCheat;
-           
+            whiteCheatFigure = Properties.Resources.whiteCheat;          
             this.startButton.Visible = true;
-
+            client.BaseAddress = new Uri(BaseUrl);
+            this.btnGamesList.Visible = true;
 
             this.Text = "Checkers";
 
@@ -791,6 +798,7 @@ namespace Client
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            this.btnGamesList.Visible = false;
             ActivateAllButtons();
             this.startButton.Visible = false;
             if (currentPlayer == 2)

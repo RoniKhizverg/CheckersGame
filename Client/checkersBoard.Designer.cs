@@ -43,6 +43,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnGamesList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -215,12 +216,26 @@
             this.textBox1.Size = new System.Drawing.Size(197, 25);
             this.textBox1.TabIndex = 17;
             // 
+            // btnGamesList
+            // 
+            this.btnGamesList.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnGamesList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGamesList.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGamesList.Location = new System.Drawing.Point(692, 455);
+            this.btnGamesList.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGamesList.Name = "btnGamesList";
+            this.btnGamesList.Size = new System.Drawing.Size(232, 53);
+            this.btnGamesList.TabIndex = 19;
+            this.btnGamesList.Text = "LIST OF GAMES";
+            this.btnGamesList.UseVisualStyleBackColor = true;
+            // 
             // checkersBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(979, 629);
+            this.Controls.Add(this.btnGamesList);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label4);
@@ -267,5 +282,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnGamesList;
     }
 }

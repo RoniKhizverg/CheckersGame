@@ -52,7 +52,6 @@ namespace Server.Api
             {
                 return BadRequest();
             }
-
             _context.Entry(tblUsers).State = EntityState.Modified;
 
             try

@@ -14,7 +14,6 @@ namespace Client
 {
     public partial class Login : Form
     {
-        private GamesDataContext gamesDataContext = new GamesDataContext();
         private static HttpClient client = new HttpClient();
         private const string BaseUrl = "https://localhost:44359/";
 
@@ -61,9 +60,9 @@ namespace Client
         private async void BtnLogin_ClickAsync(object sender, EventArgs e)
         {
 
-            string UserName = textUserResponse.Text;
+            string Name = textUserResponse.Text;
             string Password = txtPaswwordResponse.Text;
-            string apiPath = $"api/TblUsers/userLogin?name={UserName}&pw={Password}";
+            string apiPath = $"api/TblUsers/userLogin?name={Name}&pw={Password}";
 
             HttpResponseMessage res = await client.GetAsync(apiPath);
             if (res.IsSuccessStatusCode)
@@ -128,30 +127,16 @@ namespace Client
 
         }
 
-        private async void BtnSite_ClickAsync(object sender, EventArgs e)
+        private  void BtnSite_ClickAsync(object sender, EventArgs e)
         {
-            string UserName = textUserResponse.Text;
-            string Password = txtPaswwordResponse.Text;
-            string apiPath = "api/TblUsers";
-            string jsonData = @"{
-            'UserName': '',
-            'Password': ''
-            }";
-            dynamic data = JObject.Parse(jsonData);
-            data.UserName = UserName;
-            data.Password = Password;
-            var httpContent = new StringContent($"{data}", Encoding.UTF8, "application/json");
-            HttpResponseMessage res = await client.PostAsync(apiPath, httpContent);
-            if (res.IsSuccessStatusCode)
-            {
-                MessageBox.Show(res.Content.ReadAsStringAsync().Result);
-            }
-            else
-            {
-                MessageBox.Show("Something went wrong, Please try again !");
-            }
+            System.Diagnostics.Process.Start("https://localhost:44359/Users/Create");
+            
         }
 
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://localhost:44359/Users");
 
+        }
     }
 }

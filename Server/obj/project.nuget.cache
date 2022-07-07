@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "f/+oCyFrYmwyl6FxiRSc9rEjxTj9QZ+Hmqx3s6RfrOYpoPY/YN3Nfi6kkSgrrCa1EUzE8D6kRo+tV4j1wHcWzQ==",
+  "dgSpecHash": "ch3+w285a1BEX+2jg1edwHPRE56j8nbiOY/QwdOOjBuvUcudcbuDrGLmm3M+EQJYZBHTYH+cvIL10oFeQg6Rsw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\oramr\\Desktop\\Checkers\\Server\\Server.csproj",
+  "projectFilePath": "C:\\Users\\oramr\\Documents\\GitHub\\CheckersGame\\Server\\Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\oramr\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\oramr\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",

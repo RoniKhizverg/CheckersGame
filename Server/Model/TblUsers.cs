@@ -15,9 +15,9 @@ namespace Server.Model
         public string Password { get; set; }
 
         public int NumOfGames { get; set; }
-        //[StringLength(20, ErrorMessage = "phone number is too short, min length is {10}")]
+        [Range(0500000000, 9999999999, ErrorMessage = "Enter number between 0 to 1000")]
         [DataType(DataType.PhoneNumber)]
-        public string PhoneNumber { get; set; }
+        public decimal PhoneNumber { get; set; }
 
 
     }
