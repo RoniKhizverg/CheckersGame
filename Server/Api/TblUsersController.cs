@@ -45,14 +45,17 @@ namespace Server.Api
         // PUT: api/TblUsers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTblUsers(int id, TblUsers tblUsers)
+        [HttpPut("updateGame")]
+        public async Task<IActionResult> updateGame(int id)
         {
-            if (id != tblUsers.Id)
+            var user = await _context.TblUsers.FindAsync(id);
+            if (user == null)
             {
                 return BadRequest();
             }
-            _context.Entry(tblUsers).State = EntityState.Modified;
+            user.NumOfGames++;
+
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {

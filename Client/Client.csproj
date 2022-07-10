@@ -145,10 +145,10 @@
     <Compile Include="checkersBoard.Designer.cs">
       <DependentUpon>checkersBoard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Games.designer.cs">
+    <Compile Include="clientDb.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Games.dbml</DependentUpon>
+      <DependentUpon>clientDb.dbml</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
@@ -186,13 +186,13 @@
     <EmbeddedResource Include="WinForm.resx">
       <DependentUpon>WinForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Games.dbml">
+    <None Include="clientDb.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Games.designer.cs</LastGenOutput>
+      <LastGenOutput>clientDb.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="Games.dbml.layout">
-      <DependentUpon>Games.dbml</DependentUpon>
+    <None Include="clientDb.dbml.layout">
+      <DependentUpon>clientDb.dbml</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

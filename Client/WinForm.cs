@@ -23,7 +23,6 @@ namespace Client
         public void decalreTheWinner(string winner)
         {
             textBox1.Text = "The winner is " + winner + "\n congratulations!!!\n";
-            player.NumOfGames = player.NumOfGames + 1;
         }
 
         private void playAgainButton_Click(object sender, EventArgs e)

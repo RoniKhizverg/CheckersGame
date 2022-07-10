@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client.Model
 {
-    internal class GamePosition
+    public class GamePosition
     {
         public int ID { get; set; }
         public int x { get; set; }

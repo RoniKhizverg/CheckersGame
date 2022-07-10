@@ -1,8 +1,10 @@
 ﻿using Client.Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
@@ -14,16 +16,19 @@ namespace Client
 {
     public partial class checkersBoard : Form
     {
-        GamesDataContext _context = new GamesDataContext();
+        clientDbDataContext _context = new clientDbDataContext();
         private static HttpClient client = new HttpClient();
         private const string BaseUrl = "https://localhost:44359/";
+        public List<(GamePosition, int)> Positions = new List<(GamePosition, int)>();
         const int mapSize = 8;
         const int cellSize = 55;
         int eatenBlack = 0;
         int eatenWhite = 0;
         Player player;
-        Game gameRestore = null;
+        Model.Game gameRestore = null;
         private bool restoreGame = false;
+        Stopwatch timer = new Stopwatch();
+        int durationGame;
 
         int currentPlayer;
 
@@ -36,7 +41,7 @@ namespace Client
         bool endGame = false;
         bool isMoving;
 
-        int[,] map = new int[mapSize, mapSize];
+        int[,] Board = new int[mapSize, mapSize];
 
         PictureBox[,] buttons = new PictureBox[mapSize, mapSize];
 
@@ -51,10 +56,10 @@ namespace Client
 
         public checkersBoard(Player pl)
         {
-            player = pl;
             InitializeComponent();
-
-             whiteFigure = Properties.Resources.whiteSoldier;
+            player = pl;
+            restoreGame = false;
+            whiteFigure = Properties.Resources.whiteSoldier;
             blackFigure = Properties.Resources.blackSoldier;
             blackCheatFigure = Properties.Resources.cheat;
             whiteCheatFigure = Properties.Resources.whiteCheat;          
@@ -63,6 +68,28 @@ namespace Client
             this.btnGamesList.Visible = true;
 
             this.Text = "Checkers";
+            timer.Start();
+            Init();
+        }
+
+        public checkersBoard(Player pl, Model.Game gameRestore)
+        {
+            InitializeComponent();
+            player = pl;
+            restoreGame = false;
+            whiteFigure = Properties.Resources.whiteSoldier;
+            blackFigure = Properties.Resources.blackSoldier;
+            blackCheatFigure = Properties.Resources.cheat;
+            whiteCheatFigure = Properties.Resources.whiteCheat;
+            this.startButton.Visible = true;
+            this.Text = "Checkers";
+            if (client.BaseAddress == null)
+            {
+                client.BaseAddress = new Uri(BaseUrl);
+            }
+            this.btnGamesList.Visible = true;
+            this.gameRestore = gameRestore;
+
 
             Init();
         }
@@ -103,7 +130,7 @@ namespace Client
             isMoving = false;
             prevButton = null;
 
-            map = new int[mapSize, mapSize] { // 0 represent blank square, 1 represent white soldier, 2 represent black soldier.
+            Board = new int[mapSize, mapSize] { // 0 represent blank square, 1 represent white soldier, 2 represent black soldier.
                 { 0,1,0,1,0,1,0,1 },
                 { 1,0,1,0,1,0,1,0 },
                 { 0,1,0,1,0,1,0,1 },
@@ -126,27 +153,37 @@ namespace Client
             {
                 for (int j = 0; j < mapSize; j++)
                 {
-                    if (map[i, j] != server && map[i, j] != 0 )
+                    if (Board[i, j] != server && Board[i, j] != 0 )
                         player1 = true;
-                    if (map[i, j] == server)
+                    if (Board[i, j] == server)
                         player2 = true;
                 }
             }
             if (!player2)
             {
+                timer.Stop();
+                durationGame = (int)(timer.ElapsedMilliseconds / 1000);
+                winner = player.Name;
                 endGame = true;
                 winform = new WinForm(player);
-                winform.decalreTheWinner(player.Name);
+                winform.decalreTheWinner(winner);
+                PostEndGame();
+                saveGame();
                 winform.Show();
                 this.Visible = false;
+                timer.Reset();
+
             }
             if (!player1)
             {
+                timer.Stop();
+                durationGame = (int)(timer.ElapsedMilliseconds / 1000);
                 endGame = true;
                 winform = new WinForm(player);
                 winform.decalreTheWinner("server");
                 winform.Show();
                 this.Visible = false;
+                timer.Reset();
 
             }
 
@@ -166,9 +203,9 @@ namespace Client
                     button.Location = new Point(j * cellSize, i * cellSize ) ;
                     button.Size = new Size(cellSize, cellSize);
                     button.Click += new EventHandler(OnFigurePress);
-                    if (map[i, j] == 1)
+                    if (Board[i, j] == 1)
                         button.Image = whiteFigure;
-                    else if (map[i, j] == 2) button.Image = blackFigure;
+                    else if (Board[i, j] == 2) button.Image = blackFigure;
                     button.SizeMode = PictureBoxSizeMode.StretchImage;
 
                     button.BackColor = GetPrevButtonColor(button);
@@ -236,29 +273,7 @@ namespace Client
 
         }
 
-        public void resetMap()
-        {
-            for( int i=0; i < mapSize; i++)
-            {
-                for(int j=0; j < mapSize; j++)
-                {
-                    if (i % 2 == 0)
-                    {
-                        if (j % 2 == 0)
-                            buttons[i, j].BackColor = Color.White;
-                        else
-                            buttons[i, j].BackColor = Color.Black;
-                    }
-                    else
-                    {
-                        if (j % 2 == 0)
-                            buttons[i, j].BackColor = Color.Black;
-                        else
-                            buttons[i, j].BackColor = Color.White;
-                    }
-                }
-            }
-        }
+        
     
 
         public Color GetPrevButtonColor(PictureBox prevButton)
@@ -288,9 +303,14 @@ namespace Client
                 prevButton.BackColor = GetPrevButtonColor(prevButton);
 
             pressedButton = sender as PictureBox;
+            if (!restoreGame)
+            {
+                GamePosition position = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize };
+                Positions.Add((position, currentPlayer));
+            }
 
             //we check if the pressed picturebox is not blank square and the soldier belongs to player 
-            if (map[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && map[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer) 
+            if (Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer) 
             {
                 ClearSteps();
                 pressedButton.BackColor = Color.Gray; // sign the picturebox pressed.
@@ -328,15 +348,16 @@ namespace Client
                     }
                     if(currentPlayer == server)
                         System.Threading.Thread.Sleep(1000);
-                    int temp = map[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button
-                    
+                    int temp = Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button
+
                     //like swap -> update the new position of the soldier.
-                    map[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] = map[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize];
-                    map[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize] = temp; // now its blank square
+                    Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] = Board[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize];
+                    Board[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize] = temp; // now its blank square
                     pressedButton.Image = prevButton.Image; 
                     prevButton.Image = null;
                     pressedButton.Text = prevButton.Text;
                     prevButton.Text = "";
+                    
 
                     SwitchButtonToCheat(pressedButton);// check if cheat or not
 
@@ -387,7 +408,7 @@ namespace Client
             {
                 for (int j = 0; j < mapSize; j++)
                 {
-                    if (map[i, j] == currentPlayer)
+                    if (Board[i, j] == currentPlayer)
                     {
                         if (buttons[i, j].Text == "D")
                             isOneStep = false;
@@ -411,7 +432,7 @@ namespace Client
         public void SwitchButtonToCheat(PictureBox button)
         {
             //if we reach to the last y of the board and there is white soldier
-            if (map[button.Location.Y / cellSize, button.Location.X / cellSize] == 1 && button.Location.Y / cellSize == mapSize - 1)
+            if (Board[button.Location.Y / cellSize, button.Location.X / cellSize] == 1 && button.Location.Y / cellSize == mapSize - 1)
             {
                 button.Image = whiteCheatFigure;
                 button.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -420,7 +441,7 @@ namespace Client
 
             }
             //if we reach to the first y of the board and there is black soldier
-            if (map[button.Location.Y / cellSize, button.Location.X / cellSize] == 2 && button.Location.Y / cellSize == 0)
+            if (Board[button.Location.Y / cellSize, button.Location.X / cellSize] == 2 && button.Location.Y / cellSize == 0)
             {
                 button.Image = blackCheatFigure;
                 button.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -441,7 +462,7 @@ namespace Client
             int i = startButton.Location.Y / cellSize + startIndexX;
             int j = startButton.Location.X / cellSize + startIndexY;
             //delete the eaten soldier
-            if (map[i, j] == 1)//for updateing eaten White soldier
+            if (Board[i, j] == 1)//for updateing eaten White soldier
             {
                 eatenWhite++;
                 this.ScoreLableWhite.Text = eatenWhite.ToString();
@@ -454,7 +475,7 @@ namespace Client
 
                 while (currCount < count - 1)
             {
-                map[i, j] = 0; // blank sqaure
+                Board[i, j] = 0; // blank sqaure
                 buttons[i, j].Image = null; // no soldier
                 buttons[i, j].Text = ""; // no text
                 i += startIndexX;
@@ -550,7 +571,7 @@ namespace Client
         public bool DeterminePath(int ti, int tj)
         {
 
-            if (map[ti, tj] == 0 && !isContinue)
+            if (Board[ti, tj] == 0 && !isContinue)
             {
                 buttons[ti, tj].BackColor = Color.Yellow;
                 buttons[ti, tj].Enabled = true;
@@ -559,7 +580,7 @@ namespace Client
             else
             {
 
-                if (map[ti, tj] != currentPlayer)
+                if (Board[ti, tj] != currentPlayer)
                 {
                     if (pressedButton.Text == "D")
                         ShowProceduralEat(ti, tj, false);
@@ -593,7 +614,7 @@ namespace Client
             bool isEmpty = true;
             while (IsInsideBorders(il, jl))
             {
-                if (map[il, jl] != 0 && map[il, jl] != currentPlayer)
+                if (Board[il, jl] != 0 && Board[il, jl] != currentPlayer)
                 {
                     isEmpty = false;
                     break;
@@ -612,7 +633,7 @@ namespace Client
             int jk = jl + dirY;
             while (IsInsideBorders(ik, jk))
             {
-                if (map[ik, jk] == 0)
+                if (Board[ik, jk] == 0)
                 {
                     if (IsButtonHasEatStep(ik, jk, isOneStep, new int[2] { dirX, dirY }))
                     {
@@ -649,12 +670,12 @@ namespace Client
                 if (dir[0] == 1 && dir[1] == -1 && !isOneStep) break;
                 if (IsInsideBorders(i, j))
                 {
-                    if (map[i, j] != 0 && map[i, j] != currentPlayer)
+                    if (Board[i, j] != 0 && Board[i, j] != currentPlayer)
                     {
                         eatStep = true;
                         if (!IsInsideBorders(i - 1, j + 1))
                             eatStep = false;
-                        else if (map[i - 1, j + 1] != 0)
+                        else if (Board[i - 1, j + 1] != 0)
                             eatStep = false;
                         else return eatStep;
                     }
@@ -674,12 +695,12 @@ namespace Client
                 if (dir[0] == 1 && dir[1] == 1 && !isOneStep) break;
                 if (IsInsideBorders(i, j))
                 {
-                    if (map[i, j] != 0 && map[i, j] != currentPlayer)
+                    if (Board[i, j] != 0 && Board[i, j] != currentPlayer)
                     {
                         eatStep = true;
                         if (!IsInsideBorders(i - 1, j - 1))
                             eatStep = false;
-                        else if (map[i - 1, j - 1] != 0)
+                        else if (Board[i - 1, j - 1] != 0)
                             eatStep = false;
                         else return eatStep;
                     }
@@ -699,12 +720,12 @@ namespace Client
                 if (dir[0] == -1 && dir[1] == 1 && !isOneStep) break;
                 if (IsInsideBorders(i, j))
                 {
-                    if (map[i, j] != 0 && map[i, j] != currentPlayer)
+                    if (Board[i, j] != 0 && Board[i, j] != currentPlayer)
                     {
                         eatStep = true;
                         if (!IsInsideBorders(i + 1, j - 1))
                             eatStep = false;
-                        else if (map[i + 1, j - 1] != 0)
+                        else if (Board[i + 1, j - 1] != 0)
                             eatStep = false;
                         else return eatStep;
                     }
@@ -724,12 +745,12 @@ namespace Client
                 if (dir[0] == -1 && dir[1] == -1 && !isOneStep) break;
                 if (IsInsideBorders(i, j))
                 {
-                    if (map[i, j] != 0 && map[i, j] != currentPlayer)
+                    if (Board[i, j] != 0 && Board[i, j] != currentPlayer)
                     {
                         eatStep = true;
                         if (!IsInsideBorders(i + 1, j + 1))
                             eatStep = false;
-                        else if (map[i + 1, j + 1] != 0)
+                        else if (Board[i + 1, j + 1] != 0)
                             eatStep = false;
                         else return eatStep;
                     }
@@ -796,21 +817,95 @@ namespace Client
             this.Close();
         }
 
-        private void startButton_Click(object sender, EventArgs e)
+        private async void  startButton_ClickAsync(object sender, EventArgs e)
         {
             this.btnGamesList.Visible = false;
             ActivateAllButtons();
+            player.NumOfGames++;
+            string apiPath = $"api/TblUsers/updateGame?id={player.Id}";
             this.startButton.Visible = false;
+            HttpResponseMessage res = await client.PutAsJsonAsync(apiPath, 0);
+            if (!res.IsSuccessStatusCode)
+            {
+                MessageBox.Show($"{res.Content.ToString()}");
+                this.Close();
+            }
+        
             if (currentPlayer == 2)
             {
                 currentPlayer = server;
                 checkIfServerTurn();
             }
         }
+        /*
+         *  gridBoard.IsEnabled = true;
+            p.NumOfGames++;
+            string apiPath = $"api/Users/updateGame?id={p.ID}";
+            HttpResponseMessage res = await client.PutAsJsonAsync(apiPath, 0);
+            if (!res.IsSuccessStatusCode)
+            {
+                MessageBox.Show($"{res.Content.ToString()}");
+                this.Close();
+            }
+            game.InitBoard();
+            MessageBox.Show($"{p.UserName} is Starting !");
+        }
+         */
 
         private void checkersBoard_Load(object sender, EventArgs e)
         {
 
         }
+
+        private async void PostEndGame()
+        {
+            string apiPath = "api/TblGames";
+            string jsonData = @"{
+            'Date': '',
+            'Winner': '',
+            'UserID': '',
+            'DurationGame':'',
+            }";
+            dynamic data = JObject.Parse(jsonData);
+            data.Date = DateTime.Now;
+            data.Winner = winner;
+            data.UserID = player.Id;
+            data.DurationGame = durationGame;
+            var httpContent = new StringContent($"{data}", Encoding.UTF8, "application/json");
+            HttpResponseMessage res = await client.PostAsync(apiPath, httpContent);
+            if (res.IsSuccessStatusCode)
+            {
+                return;
+            }
+            else
+            {
+                MessageBox.Show("Something went wrong");
+                Close();
+            }
+        }
+        public void saveGame()
+        {
+            Guid guid = Guid.NewGuid();
+            string guidStr = guid.ToString().Substring(0, 23);
+            
+            _context.TblGames.InsertOnSubmit(new TblGame
+            {
+
+                Winner = winner,
+                Date = DateTime.Now,
+                Board = 0,
+
+            });
+            _context.SubmitChanges();
+
+            foreach (var position in this.Positions)
+            {
+                // position.Item1.GameID = guidStr;
+                _context.TblPositions.InsertOnSubmit(new TblPosition { x = position.Item1.x , y = position.Item1.y }) ;
+
+            }
+            _context.SubmitChanges();
+        }
+
     }
 }

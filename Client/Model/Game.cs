@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Client.Model
 {
-    internal class Game
+    public class Game
     {
         public int Id { get; set; }
         public string Winner { get; set; }
         public DateTime Date { get; set; }
-        public string Board { get; set; }
+        public int Board { get; set; }
     }
 }
