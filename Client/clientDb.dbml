@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="userDb" Class="clientDbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\userDb.mdf;Integrated Security=True" SettingsObjectName="Client.Properties.Settings" SettingsPropertyName="userDbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.TblGames" Member="TblGames">
+    <Type Name="TblGame">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Winner" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Board" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GameID" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TblPositions" Member="TblPositions">
+    <Type Name="TblPosition">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="x" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="y" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GameID" Type="System.String" DbType="NChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

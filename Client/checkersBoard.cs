@@ -62,7 +62,7 @@ namespace Client
             whiteFigure = Properties.Resources.whiteSoldier;
             blackFigure = Properties.Resources.blackSoldier;
             blackCheatFigure = Properties.Resources.cheat;
-            whiteCheatFigure = Properties.Resources.whiteCheat;          
+            whiteCheatFigure = Properties.Resources.whiteCheat;
             this.startButton.Visible = true;
             client.BaseAddress = new Uri(BaseUrl);
             this.btnGamesList.Visible = true;
@@ -101,7 +101,7 @@ namespace Client
             eatenWhite = 0;
             this.ScoreLableBlack.Text = eatenBlack.ToString();
             this.ScoreLableWhite.Text = eatenWhite.ToString();
-            currentPlayer = srand.Next(1,3);
+            currentPlayer = srand.Next(1, 3);
             if (currentPlayer == 1)
                 server = 2;
             else
@@ -153,7 +153,7 @@ namespace Client
             {
                 for (int j = 0; j < mapSize; j++)
                 {
-                    if (Board[i, j] != server && Board[i, j] != 0 )
+                    if (Board[i, j] != server && Board[i, j] != 0)
                         player1 = true;
                     if (Board[i, j] == server)
                         player2 = true;
@@ -193,14 +193,14 @@ namespace Client
 
         public void CreateMap()
         {
-            
+
 
             for (int i = 0; i < mapSize; i++)
             {
                 for (int j = 0; j < mapSize; j++)
                 {
                     PictureBox button = new PictureBox();
-                    button.Location = new Point(j * cellSize, i * cellSize ) ;
+                    button.Location = new Point(j * cellSize, i * cellSize);
                     button.Size = new Size(cellSize, cellSize);
                     button.Click += new EventHandler(OnFigurePress);
                     if (Board[i, j] == 1)
@@ -221,7 +221,7 @@ namespace Client
 
         public void SwitchPlayer()
         {
-            
+
             currentPlayer = currentPlayer == 1 ? 2 : 1;
             ResetGame();
         }
@@ -231,7 +231,7 @@ namespace Client
             EventArgs e = new EventArgs();
             PictureBox p2 = new PictureBox();
 
-            if (currentPlayer == server )
+            if (currentPlayer == server)
             {
 
                 do
@@ -273,8 +273,8 @@ namespace Client
 
         }
 
-        
-    
+
+
 
         public Color GetPrevButtonColor(PictureBox prevButton)
         {
@@ -297,7 +297,7 @@ namespace Client
 
         public void OnFigurePress(object sender, EventArgs e)
         {
-            isServerTurn = false ;
+            isServerTurn = false;
 
             if (prevButton != null)
                 prevButton.BackColor = GetPrevButtonColor(prevButton);
@@ -310,7 +310,7 @@ namespace Client
             }
 
             //we check if the pressed picturebox is not blank square and the soldier belongs to player 
-            if (Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer) 
+            if (Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer)
             {
                 ClearSteps();
                 pressedButton.BackColor = Color.Gray; // sign the picturebox pressed.
@@ -330,7 +330,7 @@ namespace Client
                     isMoving = false;
                 }
                 else
-                
+
                     isMoving = true;
             }
             // ןf we did a legal step.
@@ -343,25 +343,25 @@ namespace Client
                     {
                         isContinue = true; // we have one more step!! (:
                         DeleteEaten(pressedButton, prevButton); // delete the eaten soldier
-                      
+
 
                     }
-                    if(currentPlayer == server)
+                    if (currentPlayer == server)
                         System.Threading.Thread.Sleep(1000);
                     int temp = Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button
 
                     //like swap -> update the new position of the soldier.
                     Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] = Board[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize];
                     Board[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize] = temp; // now its blank square
-                    pressedButton.Image = prevButton.Image; 
+                    pressedButton.Image = prevButton.Image;
                     prevButton.Image = null;
                     pressedButton.Text = prevButton.Text;
                     prevButton.Text = "";
-                    
+
 
                     SwitchButtonToCheat(pressedButton);// check if cheat or not
 
-                    countEatSteps = 0; 
+                    countEatSteps = 0;
                     isMoving = false;
                     ClearSteps();
                     DeactivateAllButtons();
@@ -377,11 +377,11 @@ namespace Client
                         ShowPossibleSteps();
                         isContinue = false;
                         prevButton = pressedButton;
-                        if(!endGame)
+                        if (!endGame)
                             checkIfServerTurn();
                         if (currentPlayer == server)
                             isServerTurn = true;
-                        
+
 
                     }
                     // if there are eat steps 
@@ -393,7 +393,7 @@ namespace Client
                     }
                 }
             }
-            if(isServerTurn == false)
+            if (isServerTurn == false)
                 prevButton = pressedButton;
 
 
@@ -453,7 +453,7 @@ namespace Client
         public void DeleteEaten(PictureBox endButton, PictureBox startButton)
         {
             int count = Math.Abs(endButton.Location.Y / cellSize - startButton.Location.Y / cellSize); // the total distance that the soldeir pass.
-            int startIndexX = endButton.Location.Y / cellSize - startButton.Location.Y / cellSize; 
+            int startIndexX = endButton.Location.Y / cellSize - startButton.Location.Y / cellSize;
             int startIndexY = endButton.Location.X / cellSize - startButton.Location.X / cellSize;
             startIndexX = startIndexX < 0 ? -1 : 1;// if the step is with the y-axis direction start index x =1
             startIndexY = startIndexY < 0 ? -1 : 1;// if the step is with the x-axis direction start index x =2
@@ -473,7 +473,7 @@ namespace Client
                 this.ScoreLableBlack.Text = eatenBlack.ToString();
             }
 
-                while (currCount < count - 1)
+            while (currCount < count - 1)
             {
                 Board[i, j] = 0; // blank sqaure
                 buttons[i, j].Image = null; // no soldier
@@ -481,13 +481,13 @@ namespace Client
                 i += startIndexX;
                 j += startIndexY;
                 currCount++;
-                
-               
+
+
             }
 
         }
 
-       
+
 
         public void ShowSteps(int iCurrFigure, int jCurrFigure, bool isOnestep = true)
         {
@@ -812,12 +812,12 @@ namespace Client
             this.Close();
         }
 
-				private void winnerXButton_Click(object sender, EventArgs e)
-				{
+        private void winnerXButton_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
 
-        private async void  startButton_ClickAsync(object sender, EventArgs e)
+        private async void startButton_ClickAsync(object sender, EventArgs e)
         {
             this.btnGamesList.Visible = false;
             ActivateAllButtons();
@@ -830,19 +830,20 @@ namespace Client
                 MessageBox.Show($"{res.Content.ToString()}");
                 this.Close();
             }
-        
+
             if (currentPlayer == 2)
             {
                 currentPlayer = server;
                 checkIfServerTurn();
             }
         }
-       
+
 
         private void checkersBoard_Load(object sender, EventArgs e)
         {
 
         }
+
 
         private async void PostEndGame()
         {
@@ -894,4 +895,5 @@ namespace Client
         }
 
     }
+
 }
