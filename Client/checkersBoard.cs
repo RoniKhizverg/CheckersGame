@@ -851,13 +851,13 @@ namespace Client
             string jsonData = @"{
             'Date': '',
             'Winner': '',
-            'UserID': '',
+            'UserId': '',
             'DurationGame':'',
             }";
             dynamic data = JObject.Parse(jsonData);
             data.Date = DateTime.Now;
             data.Winner = winner;
-            data.UserID = player.Id;
+            data.UserId = player.Id;
             data.DurationGame = durationGame;
             var httpContent = new StringContent($"{data}", Encoding.UTF8, "application/json");
             HttpResponseMessage res = await client.PostAsync(apiPath, httpContent);

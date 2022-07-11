@@ -48,7 +48,7 @@ namespace Server.Api
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTblGames(int id, TblGames tblGames)
         {
-            if (id != tblGames.id)
+            if (id != tblGames.Id)
             {
                 return BadRequest();
             }
@@ -84,7 +84,7 @@ namespace Server.Api
             _context.TblGames.Add(tblGames);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTblGames", new { id = tblGames.id }, tblGames);
+            return CreatedAtAction("GetTblGames", new { id = tblGames.Id }, tblGames);
         }
 
         // DELETE: api/TblGames/5
@@ -105,7 +105,7 @@ namespace Server.Api
 
         private bool TblGamesExists(int id)
         {
-            return _context.TblGames.Any(e => e.id == id);
+            return _context.TblGames.Any(e => e.Id == id);
         }
     }
 }
