@@ -837,20 +837,7 @@ namespace Client
                 checkIfServerTurn();
             }
         }
-        /*
-         *  gridBoard.IsEnabled = true;
-            p.NumOfGames++;
-            string apiPath = $"api/Users/updateGame?id={p.ID}";
-            HttpResponseMessage res = await client.PutAsJsonAsync(apiPath, 0);
-            if (!res.IsSuccessStatusCode)
-            {
-                MessageBox.Show($"{res.Content.ToString()}");
-                this.Close();
-            }
-            game.InitBoard();
-            MessageBox.Show($"{p.UserName} is Starting !");
-        }
-         */
+       
 
         private void checkersBoard_Load(object sender, EventArgs e)
         {
@@ -875,6 +862,7 @@ namespace Client
             HttpResponseMessage res = await client.PostAsync(apiPath, httpContent);
             if (res.IsSuccessStatusCode)
             {
+                MessageBox.Show($"{res.Content.ToString()}");
                 return;
             }
             else
@@ -894,14 +882,12 @@ namespace Client
                 Winner = winner,
                 Date = DateTime.Now,
                 Board = 0,
-
+                GameID = guidStr,
             });
-            _context.SubmitChanges();
 
             foreach (var position in this.Positions)
             {
-                // position.Item1.GameID = guidStr;
-                _context.TblPositions.InsertOnSubmit(new TblPosition { x = position.Item1.x , y = position.Item1.y }) ;
+                _context.TblPositions.InsertOnSubmit(new TblPosition { x = position.Item1.x , y = position.Item1.y, GameID = guidStr }) ;
 
             }
             _context.SubmitChanges();

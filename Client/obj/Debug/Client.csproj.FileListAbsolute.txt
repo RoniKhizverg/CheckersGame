@@ -35,8 +35,6 @@ C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.Gene
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.exe
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.pdb
-C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\gamedb.mdf
-C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\gamedb_log.ldf
 C:\Users\RoniKhizverg\Desktop\CheckersGame\Client\bin\Debug\gamedb.mdf
 C:\Users\RoniKhizverg\Desktop\CheckersGame\Client\bin\Debug\gamedb_log.ldf
 C:\Users\RoniKhizverg\Desktop\CheckersGame\Client\bin\Debug\Client.exe.config
@@ -213,3 +211,5 @@ C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\System.Numerics.Ve
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.CopyComplete
+C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\userDb.mdf
+C:\Users\oramr\Documents\GitHub\CheckersGame\Client\bin\Debug\userDb_log.ldf
