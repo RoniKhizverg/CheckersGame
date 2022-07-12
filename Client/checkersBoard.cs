@@ -849,12 +849,14 @@ namespace Client
         {
             string apiPath = "api/TblGames";
             string jsonData = @"{
+            'Id': '',
             'Date': '',
             'Winner': '',
             'UserId': '',
             'DurationGame':'',
             }";
             dynamic data = JObject.Parse(jsonData);
+            data.Id = 100;
             data.Date = DateTime.Now;
             data.Winner = winner;
             data.UserId = player.Id;

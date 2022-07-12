@@ -610,3 +610,9 @@ C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debu
 C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Server.dll
 C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Server.pdb
 C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache
+C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
+C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Views\TblGames\Create.cshtml.g.cs
+C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Views\TblGames\Delete.cshtml.g.cs
+C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Views\TblGames\Details.cshtml.g.cs
+C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Views\TblGames\Edit.cshtml.g.cs
+C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Views\TblGames\Index.cshtml.g.cs

@@ -14,9 +14,9 @@ namespace Server.Api
     [ApiController]
     public class TblGamesController : ControllerBase
     {
-        private readonly ServerContext _context;
+        private readonly ServerContext1 _context;
 
-        public TblGamesController(ServerContext context)
+        public TblGamesController(ServerContext1 context)
         {
             _context = context;
         }
@@ -73,7 +73,6 @@ namespace Server.Api
 
             return NoContent();
         }
-        
 
         // POST: api/TblGames
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
