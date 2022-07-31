@@ -1,4 +1,5 @@
 ﻿using Client.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -53,9 +56,9 @@ namespace Client
         bool isServerTurn;
         public WinForm winform;
         private string winner;
-
         public checkersBoard(Player pl)
         {
+            CheckForIllegalCrossThreadCalls = false;
             InitializeComponent();
             player = pl;
             restoreGame = false;
@@ -130,7 +133,7 @@ namespace Client
             isMoving = false;
             prevButton = null;
 
-            Board = new int[mapSize, mapSize] { // 0 represent blank square, 1 represent white soldier, 2 represent black soldier.
+            Board = new int[mapSize, mapSize] { // 0 represent blank square, 1 represent white soldier, 2 represent black soldier. 3 represent yellow square
                 { 0,1,0,1,0,1,0,1 },
                 { 1,0,1,0,1,0,1,0 },
                 { 0,1,0,1,0,1,0,1 },
@@ -225,53 +228,70 @@ namespace Client
             currentPlayer = currentPlayer == 1 ? 2 : 1;
             ResetGame();
         }
-        public void checkIfServerTurn()
+        public async void checkIfServerTurnAsync()
         {
-            int canMoove = 0;
-            EventArgs e = new EventArgs();
-            PictureBox p2 = new PictureBox();
+            string apiPath2 = $"api/TblGames/turn";
+            string apiPath = $"api/TblGames/raffle";
+            var httpClient = new HttpClient(new HttpClientHandler());
 
+            PictureBox p;
+            PictureBox serverPosStep2;
+            //  do
+            //{
+            EventArgs e = new EventArgs();
+            p = new PictureBox();
+            serverPosStep2 = new PictureBox();
+            GamePosition serverPos2 = null;
+            int canMoove = 0;
             if (currentPlayer == server)
             {
-
+                var anonymous = new { player = currentPlayer, board = Board };
                 do
                 {
-                    int i = srand.Next(0, mapSize);
-                    int j = srand.Next(0, mapSize);
-                    PictureBox p = new PictureBox();
-                    p = buttons[i, j];
-                    if (p.Enabled == true)
+                    HttpResponseMessage res = await client.PostAsJsonAsync(apiPath, anonymous);
+
+                    res.EnsureSuccessStatusCode();
+                    if (res.IsSuccessStatusCode)
                     {
-                        OnFigurePress(p, e);
-                        for (int x = 0; x < mapSize; x++)
-                        {
-                            for (int y = 0; y < mapSize; y++)
-                            {
-                                if (buttons[x, y].BackColor == Color.Yellow)
-                                {
-                                    p2 = buttons[x, y];
-                                    OnFigurePress(p2, e);
-                                    canMoove = 1;
-                                    x = 0;
-                                    y = 0;
-                                }
-
-                            }
-                        }
-
-                        if (canMoove == 0)
+                        GamePosition serverPos = await res.Content.ReadAsAsync<GamePosition>();
+                        p = buttons[serverPos.x, serverPos.y];
+                        if (p.Enabled)
                         {
                             OnFigurePress(p, e);
 
+                            do
+                            {
+                                var anonymous2 = new { board = Board };
+                                HttpResponseMessage res2 = await client.PostAsJsonAsync(apiPath2, anonymous2);
+
+                                if (res2.IsSuccessStatusCode)
+                                {
+
+                                    serverPos2 = await res2.Content.ReadAsAsync<GamePosition>();
+                                    if (serverPos2.status != -1)
+                                    {
+                                        serverPosStep2 = buttons[serverPos2.x, serverPos2.y];
+                                        OnFigurePress(serverPosStep2, e);
+                                        canMoove = 1;
+
+                                    }
+                                }
+                            }
+                            while (serverPos2.status != -1);
+
+                            
+                            if (serverPos2.status == -1)
+                                OnFigurePress(p, e);
                         }
                     }
 
 
-                }
-                while (canMoove == 0);
+                } while (serverPos2 ==null|| canMoove == 0);
             }
-
         }
+        
+    
+
 
 
 
@@ -313,6 +333,7 @@ namespace Client
             if (Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer)
             {
                 ClearSteps();
+                clearYellowCells();
                 pressedButton.BackColor = Color.Gray; // sign the picturebox pressed.
                 DeactivateAllButtons(); // deactivate all the picturebox except the pressed button
                 pressedButton.Enabled = true;
@@ -325,6 +346,7 @@ namespace Client
                 if (isMoving)
                 {
                     ClearSteps();
+                    clearYellowCells();
                     pressedButton.BackColor = GetPrevButtonColor(pressedButton);
                     ShowPossibleSteps();
                     isMoving = false;
@@ -348,8 +370,8 @@ namespace Client
                     }
                     if (currentPlayer == server)
                         System.Threading.Thread.Sleep(1000);
-                    int temp = Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button
-
+                    clearYellowCells();
+                    int temp = Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button                   
                     //like swap -> update the new position of the soldier.
                     Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] = Board[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize];
                     Board[prevButton.Location.Y / cellSize, prevButton.Location.X / cellSize] = temp; // now its blank square
@@ -364,6 +386,7 @@ namespace Client
                     countEatSteps = 0;
                     isMoving = false;
                     ClearSteps();
+                    clearYellowCells();
                     DeactivateAllButtons();
                     //check if we have additions eat steps
                     if (pressedButton.Text == "D")
@@ -373,12 +396,13 @@ namespace Client
                     if (countEatSteps == 0 || !isContinue)
                     {
                         ClearSteps();
+                        clearYellowCells();
                         SwitchPlayer();
                         ShowPossibleSteps();
                         isContinue = false;
                         prevButton = pressedButton;
                         if (!endGame)
-                            checkIfServerTurn();
+                            checkIfServerTurnAsync();
                         if (currentPlayer == server)
                             isServerTurn = true;
 
@@ -397,6 +421,21 @@ namespace Client
                 prevButton = pressedButton;
 
 
+        }
+
+        private void clearYellowCells()
+        {
+            for(int i=0;i< mapSize;i++)
+            {
+                for (int j = 0; j < mapSize;j++)
+                {
+
+                    if (Board[i,j] == 3 )
+                        Board[i,j] = 0;
+                }
+
+
+            }
         }
 
         public void ShowPossibleSteps()
@@ -574,6 +613,7 @@ namespace Client
             if (Board[ti, tj] == 0 && !isContinue)
             {
                 buttons[ti, tj].BackColor = Color.Yellow;
+                Board[buttons[ti, tj].Location.Y / cellSize, buttons[ti, tj].Location.X / cellSize] = 3;//yellow
                 buttons[ti, tj].Enabled = true;
                 simpleSteps.Add(buttons[ti, tj]);
             }
@@ -599,6 +639,7 @@ namespace Client
                 for (int i = 0; i < simpleSteps.Count; i++)
                 {
                     simpleSteps[i].BackColor = GetPrevButtonColor(simpleSteps[i]);
+                    Board[simpleSteps[i].Location.Y / cellSize, simpleSteps[i].Location.X / cellSize] = 0;
                     simpleSteps[i].Enabled = false;
                 }
             }
@@ -644,6 +685,7 @@ namespace Client
                         toClose.Add(buttons[ik, jk]);
                     }
                     buttons[ik, jk].BackColor = Color.Yellow;
+                    Board[buttons[ik, jk].Location.Y / cellSize, buttons[ik, jk].Location.X / cellSize] = 3;//yellow
                     buttons[ik, jk].Enabled = true;
                     countEatSteps++;
                 }
@@ -834,7 +876,7 @@ namespace Client
             if (currentPlayer == 2)
             {
                 currentPlayer = server;
-                checkIfServerTurn();
+                checkIfServerTurnAsync();
             }
         }
 
@@ -849,14 +891,12 @@ namespace Client
         {
             string apiPath = "api/TblGames";
             string jsonData = @"{
-            'Id': '',
             'Date': '',
             'Winner': '',
             'UserId': '',
             'DurationGame':'',
             }";
             dynamic data = JObject.Parse(jsonData);
-            data.Id = 100;
             data.Date = DateTime.Now;
             data.Winner = winner;
             data.UserId = player.Id;

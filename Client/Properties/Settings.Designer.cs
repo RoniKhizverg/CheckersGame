@@ -26,8 +26,8 @@ namespace Client.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\userDb.mdf;In" +
-            "tegrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\oramr\\Documents\\GitH" +
+            "ub\\CheckersGame\\Client\\userDb.mdf;Integrated Security=True")]
         public string userDbConnectionString {
             get {
                 return ((string)(this["userDbConnectionString"]));

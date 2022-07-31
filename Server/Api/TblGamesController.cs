@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Model;
+
 
 namespace Server.Api
 {
@@ -15,7 +20,6 @@ namespace Server.Api
     public class TblGamesController : ControllerBase
     {
         private readonly ServerContext1 _context;
-
         public TblGamesController(ServerContext1 context)
         {
             _context = context;
@@ -85,6 +89,51 @@ namespace Server.Api
 
             return CreatedAtAction("GetTblGames", new { id = tblGames.Id }, tblGames);
         }
+
+        // POST: api/TblGames/raffle
+        [HttpPost("raffle")]
+        public TurnPos RaffleStep([FromBody] dynamic data)
+        {
+            TurnPos turnPos = new TurnPos();
+            var random = new Random();
+            var z = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));
+            int randX;
+            int randY;
+            do
+            {
+                randX = random.Next(0, z.board.Count);
+                randY = random.Next(0, z.board.Count);
+                turnPos.x = randX;
+                turnPos.y = randY;
+
+            } while (z.board[randX][ randY] != z.player);
+
+            return turnPos;
+                       
+         }
+            
+
+        // POST: api/TblGames/turn
+
+        [HttpPost("turn")]
+        public TurnPos PlayTurn([FromBody] dynamic data)
+        {
+            var random = new Random();
+            TurnPos turn = new TurnPos();
+            turn.status = -1;
+            List<(int, int)> tmpFreePos = new List<(int, int)>();
+            tmpFreePos = turn.CheckPossibleSteps(data);
+            if (tmpFreePos.Count != 0)
+            {
+                turn.status = 1;
+                int randIndex = random.Next(tmpFreePos.Count);
+                turn.x = tmpFreePos[randIndex].Item1;
+                turn.y = tmpFreePos[randIndex].Item2;
+            }
+                return turn;
+
+        }
+
 
         // DELETE: api/TblGames/5
         [HttpDelete("{id}")]

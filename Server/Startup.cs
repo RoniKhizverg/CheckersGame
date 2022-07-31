@@ -31,13 +31,8 @@ namespace Server
                     options.UseSqlServer(Configuration.GetConnectionString("ServerContext1")));
             services.AddDbContext<ServerContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ServerContext")));
-
-            /*
-            services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration["AllowedHosts:ServerContext1:ConnectionString"]))
-             .AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration["Data:FooBar:ConnectionString"]));
-            */
+            services.AddControllers();
+        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
