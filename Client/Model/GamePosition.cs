@@ -11,6 +11,8 @@ namespace Client.Model
         public int ID { get; set; }
         public int x { get; set; }
         public int y { get; set; }
+
+        public int currentPlayer{get;set;}
         public int status { get; set; }
 
         public string GameID { get; set; }

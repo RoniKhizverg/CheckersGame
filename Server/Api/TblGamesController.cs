@@ -96,17 +96,17 @@ namespace Server.Api
         {
             TurnPos turnPos = new TurnPos();
             var random = new Random();
-            var z = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));
+            var annonymousObject = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));
             int randX;
             int randY;
             do
             {
-                randX = random.Next(0, z.board.Count);
-                randY = random.Next(0, z.board.Count);
+                randX = random.Next(0, annonymousObject.board.Count);
+                randY = random.Next(0, annonymousObject.board.Count);
                 turnPos.x = randX;
                 turnPos.y = randY;
 
-            } while (z.board[randX][ randY] != z.player);
+            } while (annonymousObject.board[randX][ randY] != annonymousObject.player);
 
             return turnPos;
                        
@@ -121,14 +121,14 @@ namespace Server.Api
             var random = new Random();
             TurnPos turn = new TurnPos();
             turn.status = -1;
-            List<(int, int)> tmpFreePos = new List<(int, int)>();
-            tmpFreePos = turn.CheckPossibleSteps(data);
-            if (tmpFreePos.Count != 0)
+            List<(int, int)> tmpOptionalPos = new List<(int, int)>();
+            tmpOptionalPos = turn.CheckPossibleSteps(data);
+            if (tmpOptionalPos.Count != 0)
             {
                 turn.status = 1;
-                int randIndex = random.Next(tmpFreePos.Count);
-                turn.x = tmpFreePos[randIndex].Item1;
-                turn.y = tmpFreePos[randIndex].Item2;
+                int randIndex = random.Next(tmpOptionalPos.Count);
+                turn.x = tmpOptionalPos[randIndex].Item1;
+                turn.y = tmpOptionalPos[randIndex].Item2;
             }
                 return turn;
 

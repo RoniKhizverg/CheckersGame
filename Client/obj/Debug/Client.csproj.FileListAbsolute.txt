@@ -55,6 +55,7 @@ C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.Sugg
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.checkersBoard.resources
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.Login.resources
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.RestoreGames.resources
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.WinForm.resources
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.GenerateResource.cache
 C:\Users\oramr\Documents\GitHub\CheckersGame\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache

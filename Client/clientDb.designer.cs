@@ -257,6 +257,8 @@ namespace Client
 		
 		private string _GameID;
 		
+		private System.Nullable<int> _currentPlayer;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -269,6 +271,8 @@ namespace Client
     partial void OnyChanged();
     partial void OnGameIDChanging(string value);
     partial void OnGameIDChanged();
+    partial void OncurrentPlayerChanging(System.Nullable<int> value);
+    partial void OncurrentPlayerChanged();
     #endregion
 		
 		public TblPosition()
@@ -352,6 +356,26 @@ namespace Client
 					this._GameID = value;
 					this.SendPropertyChanged("GameID");
 					this.OnGameIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_currentPlayer", DbType="Int")]
+		public System.Nullable<int> currentPlayer
+		{
+			get
+			{
+				return this._currentPlayer;
+			}
+			set
+			{
+				if ((this._currentPlayer != value))
+				{
+					this.OncurrentPlayerChanging(value);
+					this.SendPropertyChanging();
+					this._currentPlayer = value;
+					this.SendPropertyChanged("currentPlayer");
+					this.OncurrentPlayerChanged();
 				}
 			}
 		}

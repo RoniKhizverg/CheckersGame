@@ -28,7 +28,8 @@ namespace Client
         int eatenBlack = 0;
         int eatenWhite = 0;
         Player player;
-        Model.Game gameRestore = null;
+        Game gameRestore = null;
+        Game game = new Game();
         private bool restoreGame = false;
         Stopwatch timer = new Stopwatch();
         int durationGame;
@@ -67,7 +68,10 @@ namespace Client
             blackCheatFigure = Properties.Resources.cheat;
             whiteCheatFigure = Properties.Resources.whiteCheat;
             this.startButton.Visible = true;
-            client.BaseAddress = new Uri(BaseUrl);
+            if (client.BaseAddress == null)
+            {
+                client.BaseAddress = new Uri(BaseUrl);
+            }
             this.btnGamesList.Visible = true;
 
             this.Text = "Checkers";
@@ -75,7 +79,7 @@ namespace Client
             Init();
         }
 
-        public checkersBoard(Player pl, Model.Game gameRestore)
+        public checkersBoard(Player pl, Game gameRestore)
         {
             InitializeComponent();
             player = pl;
@@ -92,6 +96,8 @@ namespace Client
             }
             this.btnGamesList.Visible = true;
             this.gameRestore = gameRestore;
+
+            restoredGameRun(gameRestore);
 
 
             Init();
@@ -168,7 +174,7 @@ namespace Client
                 durationGame = (int)(timer.ElapsedMilliseconds / 1000);
                 winner = player.Name;
                 endGame = true;
-                winform = new WinForm(player);
+                winform = new WinForm();
                 winform.decalreTheWinner(winner);
                 PostEndGame();
                 saveGame();
@@ -182,8 +188,10 @@ namespace Client
                 timer.Stop();
                 durationGame = (int)(timer.ElapsedMilliseconds / 1000);
                 endGame = true;
-                winform = new WinForm(player);
+                winform = new WinForm();
                 winform.decalreTheWinner("server");
+                PostEndGame();
+                saveGame();
                 winform.Show();
                 this.Visible = false;
                 timer.Reset();
@@ -232,14 +240,10 @@ namespace Client
         {
             string apiPath2 = $"api/TblGames/turn";
             string apiPath = $"api/TblGames/raffle";
-            var httpClient = new HttpClient(new HttpClientHandler());
-
-            PictureBox p;
+            PictureBox serverPosStep1;
             PictureBox serverPosStep2;
-            //  do
-            //{
             EventArgs e = new EventArgs();
-            p = new PictureBox();
+            serverPosStep1 = new PictureBox();
             serverPosStep2 = new PictureBox();
             GamePosition serverPos2 = null;
             int canMoove = 0;
@@ -254,19 +258,18 @@ namespace Client
                     if (res.IsSuccessStatusCode)
                     {
                         GamePosition serverPos = await res.Content.ReadAsAsync<GamePosition>();
-                        p = buttons[serverPos.x, serverPos.y];
-                        if (p.Enabled)
+                        serverPosStep1 = buttons[serverPos.x, serverPos.y];
+                        if (serverPosStep1.Enabled)
                         {
-                            OnFigurePress(p, e);
+                            OnFigurePress(serverPosStep1, e);
 
                             do
                             {
-                                var anonymous2 = new { board = Board };
-                                HttpResponseMessage res2 = await client.PostAsJsonAsync(apiPath2, anonymous2);
+                                var board = new { board = Board };
+                                HttpResponseMessage res2 = await client.PostAsJsonAsync(apiPath2, board);
 
                                 if (res2.IsSuccessStatusCode)
                                 {
-
                                     serverPos2 = await res2.Content.ReadAsAsync<GamePosition>();
                                     if (serverPos2.status != -1)
                                     {
@@ -279,18 +282,18 @@ namespace Client
                             }
                             while (serverPos2.status != -1);
 
-                            
+
                             if (serverPos2.status == -1)
-                                OnFigurePress(p, e);
+                                OnFigurePress(serverPosStep1, e);
                         }
                     }
 
 
-                } while (serverPos2 ==null|| canMoove == 0);
+                } while (serverPos2 == null || canMoove == 0);
             }
         }
-        
-    
+
+
 
 
 
@@ -323,11 +326,7 @@ namespace Client
                 prevButton.BackColor = GetPrevButtonColor(prevButton);
 
             pressedButton = sender as PictureBox;
-            if (!restoreGame)
-            {
-                GamePosition position = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize };
-                Positions.Add((position, currentPlayer));
-            }
+
 
             //we check if the pressed picturebox is not blank square and the soldier belongs to player 
             if (Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer)
@@ -360,6 +359,13 @@ namespace Client
             {
                 if (isMoving)
                 {
+                    if (!restoreGame)
+                    {
+                        GamePosition position = new GamePosition { x = prevButton.Location.Y / cellSize, y = prevButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                        Positions.Add((position, currentPlayer));
+                        GamePosition position2 = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                        Positions.Add((position, currentPlayer));
+                    }
                     isContinue = false;
                     if (Math.Abs(pressedButton.Location.X / cellSize - prevButton.Location.X / cellSize) > 1) // we eat a tasty soldier.
                     {
@@ -425,13 +431,13 @@ namespace Client
 
         private void clearYellowCells()
         {
-            for(int i=0;i< mapSize;i++)
+            for (int i = 0; i < mapSize; i++)
             {
-                for (int j = 0; j < mapSize;j++)
+                for (int j = 0; j < mapSize; j++)
                 {
 
-                    if (Board[i,j] == 3 )
-                        Board[i,j] = 0;
+                    if (Board[i, j] == 3)
+                        Board[i, j] = 0;
                 }
 
 
@@ -905,7 +911,6 @@ namespace Client
             HttpResponseMessage res = await client.PostAsync(apiPath, httpContent);
             if (res.IsSuccessStatusCode)
             {
-                MessageBox.Show($"{res.Content.ToString()}");
                 return;
             }
             else
@@ -918,7 +923,7 @@ namespace Client
         {
             Guid guid = Guid.NewGuid();
             string guidStr = guid.ToString().Substring(0, 23);
-            
+
             _context.TblGames.InsertOnSubmit(new TblGame
             {
 
@@ -930,12 +935,50 @@ namespace Client
 
             foreach (var position in this.Positions)
             {
-                _context.TblPositions.InsertOnSubmit(new TblPosition { x = position.Item1.x , y = position.Item1.y, GameID = guidStr }) ;
+                _context.TblPositions.InsertOnSubmit(new TblPosition { x = position.Item1.x, y = position.Item1.y, currentPlayer = position.Item1.currentPlayer, GameID = guidStr });
 
             }
             _context.SubmitChanges();
         }
 
+        private void btnGamesList_Click(object sender, EventArgs e)
+        {
+            RestoreGames restoreGames = new RestoreGames(this.player);
+            restoreGames.Show();
+        }
+        public async void restoredGameRun(Game gameRestore)
+        {
+            this.startButton.Enabled = false;
+            EventArgs e = new EventArgs();
+            var query = from c in _context.TblPositions
+                        where c.GameID == gameRestore.GameID
+                        select new GamePosition { GameID = c.GameID, x = (int)c.x, y = (int)c.y };
+
+            var results = query.ToList();
+            updatePositionsList(results);
+            game.Winner = gameRestore.Winner.Trim();
+            game.Date = gameRestore.Date;
+            PictureBox picturebox = new PictureBox();
+            foreach ((GamePosition, int) p in Positions)
+            {
+                await Task.Delay(1000);
+                picturebox = buttons[p.Item1.x, p.Item1.y];
+                OnFigurePress(picturebox, e);
+            }
+            winform = new WinForm();
+            winform.decalreTheWinner(game.Winner);
+            winform.Show();
+            this.Visible = false;
+        }
+
+        private void updatePositionsList(List<GamePosition> positions)
+        {
+            foreach (GamePosition position in positions)
+            {
+                currentPlayer = position.currentPlayer;
+                this.Positions.Add((position, position.currentPlayer));
+            }
+        }
     }
 
 }

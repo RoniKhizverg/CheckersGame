@@ -13,10 +13,9 @@ namespace Client
     public partial class WinForm : Form
     {
         private Player player;
-        public WinForm(Player p)
+        public WinForm()
         {
             InitializeComponent();
-            player = p;
         }
 
          

@@ -228,6 +228,7 @@
             this.btnGamesList.TabIndex = 19;
             this.btnGamesList.Text = "LIST OF GAMES";
             this.btnGamesList.UseVisualStyleBackColor = true;
+            this.btnGamesList.Click += new System.EventHandler(this.btnGamesList_Click);
             // 
             // checkersBoard
             // 

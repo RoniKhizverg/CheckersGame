@@ -2,16 +2,16 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="clientDb">
   <DataContextMoniker Name="/clientDbDataContext" />
   <nestedChildShapes>
-    <classShape Id="55359e1b-d429-4afc-b105-a67917122757" absoluteBounds="8.375, 2.5, 2, 1.7708968098958331">
+    <classShape Id="55359e1b-d429-4afc-b105-a67917122757" absoluteBounds="6.375, 1, 2, 1.7708968098958331">
       <DataClassMoniker Name="/clientDbDataContext/TblGame" />
       <nestedChildShapes>
-        <elementListCompartment Id="a659d3bc-e8c6-4d58-9e40-544be23bcef1" absoluteBounds="8.39, 2.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="a659d3bc-e8c6-4d58-9e40-544be23bcef1" absoluteBounds="6.3900000000000006, 1.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="0076386e-a331-4c7d-bcd3-8edee1109e5a" absoluteBounds="5.5, 2.625, 2, 1.5785953776041666">
+    <classShape Id="bba77baf-4081-4a11-9995-1c5d152849a3" absoluteBounds="3, 1.125, 2, 1.7708968098958331">
       <DataClassMoniker Name="/clientDbDataContext/TblPosition" />
       <nestedChildShapes>
-        <elementListCompartment Id="875f8826-d7d7-422d-96d0-ad51f4de24b7" absoluteBounds="5.515, 3.085, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="0c93b28c-3872-4da9-b0d3-7dbd372a9e48" absoluteBounds="3.015, 1.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

@@ -14,13 +14,13 @@ namespace Server.Model
 
         public List<(int, int)> CheckPossibleSteps(dynamic data)
         {
-            var z = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));
+            var annonymousObject = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));
             List<(int, int)> freePos = new List<(int, int)>();
-            for (int x = 0; x < z.board.Count; x++)
+            for (int x = 0; x < annonymousObject.board.Count; x++)
             {
-                for (int y = 0; y < z.board.Count; y++)
+                for (int y = 0; y < annonymousObject.board.Count; y++)
                 {
-                    if (z.board[x][y] == 3)
+                    if (annonymousObject.board[x][y] == 3)
                     {
                         freePos.Add((x, y));
                     }
