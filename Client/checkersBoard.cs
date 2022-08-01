@@ -187,6 +187,7 @@ namespace Client
             {
                 timer.Stop();
                 durationGame = (int)(timer.ElapsedMilliseconds / 1000);
+                winner = "server";
                 endGame = true;
                 winform = new WinForm();
                 winform.decalreTheWinner("server");

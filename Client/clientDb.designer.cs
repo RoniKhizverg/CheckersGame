@@ -39,7 +39,7 @@ namespace Client
     #endregion
 		
 		public clientDbDataContext() : 
-				base(global::Client.Properties.Settings.Default.userDbConnectionString, mappingSource)
+				base(global::Client.Properties.Settings.Default.userDbConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}

@@ -26,11 +26,10 @@ namespace Client.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\oramr\\Documents\\GitH" +
-            "ub\\CheckersGame\\Client\\userDb.mdf;Integrated Security=True")]
-        public string userDbConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Client\userDb.mdf;Integrated Security=TrueData Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Client\userDb.mdf;Integrated Security=True")]
+        public string userDbConnectionString1 {
             get {
-                return ((string)(this["userDbConnectionString"]));
+                return ((string)(this["userDbConnectionString1"]));
             }
         }
     }
