@@ -83,24 +83,19 @@ namespace Client
         {
             InitializeComponent();
             player = pl;
-            restoreGame = false;
+            restoreGame = true;
             whiteFigure = Properties.Resources.whiteSoldier;
             blackFigure = Properties.Resources.blackSoldier;
             blackCheatFigure = Properties.Resources.cheat;
             whiteCheatFigure = Properties.Resources.whiteCheat;
-            this.startButton.Visible = true;
+            this.startButton.Visible = false;
             this.Text = "Checkers";
             if (client.BaseAddress == null)
             {
                 client.BaseAddress = new Uri(BaseUrl);
             }
-            this.btnGamesList.Visible = true;
+            this.btnGamesList.Visible = false;
             this.gameRestore = gameRestore;
-
-            restoredGameRun(gameRestore);
-
-
-            Init();
         }
 
         public void Init()
@@ -176,8 +171,11 @@ namespace Client
                 endGame = true;
                 winform = new WinForm();
                 winform.decalreTheWinner(winner);
-                PostEndGame();
-                saveGame();
+                if (!restoreGame)
+                {
+                    PostEndGame();
+                    saveGame();
+                }
                 winform.Show();
                 this.Visible = false;
                 timer.Reset();
@@ -191,8 +189,11 @@ namespace Client
                 endGame = true;
                 winform = new WinForm();
                 winform.decalreTheWinner("server");
-                PostEndGame();
-                saveGame();
+                if (!restoreGame)
+                {
+                    PostEndGame();
+                    saveGame();
+                }
                 winform.Show();
                 this.Visible = false;
                 timer.Reset();
@@ -341,7 +342,7 @@ namespace Client
                 if (pressedButton.Text == "D")
                     ShowSteps(pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize, false);
                 else ShowSteps(pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize);
-
+               
                 // enable us to press again on the same sqaure pressed              
                 if (isMoving)
                 {
@@ -362,21 +363,40 @@ namespace Client
                 {
                     if (!restoreGame)
                     {
-                        GamePosition position = new GamePosition { x = prevButton.Location.Y / cellSize, y = prevButton.Location.X / cellSize, currentPlayer = currentPlayer };
-                        Positions.Add((position, currentPlayer));
-                        GamePosition position2 = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize, currentPlayer = currentPlayer };
-                        Positions.Add((position, currentPlayer));
+                        if (Positions.Count != 0)
+                        {
+                            if ((Positions.Last().Item1.x != prevButton.Location.Y / cellSize) || (Positions.Last().Item1.y != prevButton.Location.X / cellSize))
+                            {
+                                GamePosition position = new GamePosition { x = prevButton.Location.Y / cellSize, y = prevButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                                Positions.Add((position, currentPlayer));
+                                GamePosition position2 = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                                Positions.Add((position2, currentPlayer));
+                            }
+                            else
+                            {
+                                GamePosition position2 = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                                Positions.Add((position2, currentPlayer));
+                            }
+                        }
+                        else
+                        {
+                            GamePosition position = new GamePosition { x = prevButton.Location.Y / cellSize, y = prevButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                            Positions.Add((position, currentPlayer));
+                            GamePosition position2 = new GamePosition { x = pressedButton.Location.Y / cellSize, y = pressedButton.Location.X / cellSize, currentPlayer = currentPlayer };
+                            Positions.Add((position2, currentPlayer));
+
+                        }
                     }
                     isContinue = false;
                     if (Math.Abs(pressedButton.Location.X / cellSize - prevButton.Location.X / cellSize) > 1) // we eat a tasty soldier.
                     {
                         isContinue = true; // we have one more step!! (:
                         DeleteEaten(pressedButton, prevButton); // delete the eaten soldier
-
+                       
 
                     }
-                    if (currentPlayer == server)
-                        System.Threading.Thread.Sleep(1000);
+                    if (currentPlayer == server || restoreGame)
+                       System.Threading.Thread.Sleep(2000);
                     clearYellowCells();
                     int temp = Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize];// the position of the pressed button                   
                     //like swap -> update the new position of the soldier.
@@ -512,15 +532,18 @@ namespace Client
             {
                 eatenWhite++;
                 this.ScoreLableWhite.Text = eatenWhite.ToString();
+
             }
             else//for updateing eaten Black soldier
             {
                 eatenBlack++;
                 this.ScoreLableBlack.Text = eatenBlack.ToString();
+
             }
 
             while (currCount < count - 1)
             {
+               
                 Board[i, j] = 0; // blank sqaure
                 buttons[i, j].Image = null; // no soldier
                 buttons[i, j].Text = ""; // no text
@@ -530,6 +553,7 @@ namespace Client
 
 
             }
+
 
         }
 
@@ -945,26 +969,33 @@ namespace Client
         private void btnGamesList_Click(object sender, EventArgs e)
         {
             RestoreGames restoreGames = new RestoreGames(this.player);
+            this.Hide();
             restoreGames.Show();
         }
         public async void restoredGameRun(Game gameRestore)
         {
+            Init();
             this.startButton.Enabled = false;
             EventArgs e = new EventArgs();
             var query = from c in _context.TblPositions
                         where c.GameID == gameRestore.GameID
-                        select new GamePosition { GameID = c.GameID, x = (int)c.x, y = (int)c.y };
+                        select new GamePosition { GameID = c.GameID, x = (int)c.x, y = (int)c.y ,currentPlayer = (int)c.currentPlayer,ID = c.Id};
 
             var results = query.ToList();
             updatePositionsList(results);
             game.Winner = gameRestore.Winner.Trim();
             game.Date = gameRestore.Date;
-            PictureBox picturebox = new PictureBox();
+            await Task.Delay(2000);
             foreach ((GamePosition, int) p in Positions)
             {
-                await Task.Delay(1000);
+         //       if(restoreGame)
+           //         await Task.Delay(3000);
+                PictureBox picturebox = new PictureBox();
                 picturebox = buttons[p.Item1.x, p.Item1.y];
                 OnFigurePress(picturebox, e);
+
+
+
             }
             winform = new WinForm();
             winform.decalreTheWinner(game.Winner);
@@ -974,11 +1005,20 @@ namespace Client
 
         private void updatePositionsList(List<GamePosition> positions)
         {
+            currentPlayer = positions.First().currentPlayer;
+            if (currentPlayer == 1)
+                server = 2;
+            else
+                server = 1;
             foreach (GamePosition position in positions)
-            {
-                currentPlayer = position.currentPlayer;
+            {                
                 this.Positions.Add((position, position.currentPlayer));
             }
+        }
+
+        private void restoreGameBtn_Click(object sender, EventArgs e)
+        {
+            restoredGameRun(gameRestore);
         }
     }
 

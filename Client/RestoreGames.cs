@@ -44,8 +44,8 @@ namespace Client
             Game gameObject = new Game { Id = Id,Winner = winner,Board = board,Date=Date,GameID = gameId };
 
             this.Hide();
-            checkersBoard main = new checkersBoard(this._player, gameObject);
-            main.Show();
+            checkersBoard checkersBoard = new checkersBoard(this._player, gameObject);
+            checkersBoard.Show();
             this.Close();
         }
 

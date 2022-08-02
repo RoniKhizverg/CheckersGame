@@ -44,6 +44,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnGamesList = new System.Windows.Forms.Button();
+            this.restoreGameBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -70,7 +71,7 @@
             this.startButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.startButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.startButton.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startButton.Location = new System.Drawing.Point(692, 561);
+            this.startButton.Location = new System.Drawing.Point(660, 552);
             this.startButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(200, 39);
@@ -221,7 +222,7 @@
             this.btnGamesList.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnGamesList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGamesList.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGamesList.Location = new System.Drawing.Point(692, 455);
+            this.btnGamesList.Location = new System.Drawing.Point(647, 470);
             this.btnGamesList.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGamesList.Name = "btnGamesList";
             this.btnGamesList.Size = new System.Drawing.Size(232, 53);
@@ -230,12 +231,27 @@
             this.btnGamesList.UseVisualStyleBackColor = true;
             this.btnGamesList.Click += new System.EventHandler(this.btnGamesList_Click);
             // 
+            // restoreGameBtn
+            // 
+            this.restoreGameBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.restoreGameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.restoreGameBtn.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.restoreGameBtn.Location = new System.Drawing.Point(647, 395);
+            this.restoreGameBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.restoreGameBtn.Name = "restoreGameBtn";
+            this.restoreGameBtn.Size = new System.Drawing.Size(232, 53);
+            this.restoreGameBtn.TabIndex = 20;
+            this.restoreGameBtn.Text = "RESTORE GAME";
+            this.restoreGameBtn.UseVisualStyleBackColor = true;
+            this.restoreGameBtn.Click += new System.EventHandler(this.restoreGameBtn_Click);
+            // 
             // checkersBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(979, 629);
+            this.Controls.Add(this.restoreGameBtn);
             this.Controls.Add(this.btnGamesList);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
@@ -284,5 +300,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnGamesList;
+        private System.Windows.Forms.Button restoreGameBtn;
     }
 }
