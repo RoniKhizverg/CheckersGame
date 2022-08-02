@@ -89,6 +89,8 @@ namespace Client
             blackCheatFigure = Properties.Resources.cheat;
             whiteCheatFigure = Properties.Resources.whiteCheat;
             this.startButton.Visible = false;
+            ScoreLableBlack.Visible = false;
+            ScoreLableWhite.Visible = false;
             this.Text = "Checkers";
             if (client.BaseAddress == null)
             {
@@ -100,6 +102,7 @@ namespace Client
 
         public void Init()
         {
+
             endGame = false;
             eatenBlack = 0;
             eatenWhite = 0;
@@ -148,22 +151,25 @@ namespace Client
             CreateMap();
         }
 
-        public void ResetGame()
+        public void ResetGame(bool technicalVictory = false)
         {
-            bool player1 = false;
-            bool player2 = false;
-
+            int serverSoldiersLeft = 0;
+            int playerSoldiersLeft = 0;
             for (int i = 0; i < mapSize; i++)
             {
                 for (int j = 0; j < mapSize; j++)
                 {
                     if (Board[i, j] != server && Board[i, j] != 0)
-                        player1 = true;
+                    {
+                        playerSoldiersLeft++;
+                    }
                     if (Board[i, j] == server)
-                        player2 = true;
+                    {
+                        serverSoldiersLeft++;
+                    }
                 }
             }
-            if (!player2)
+            if (serverSoldiersLeft == 0 ||((technicalVictory)&& (serverSoldiersLeft == 1)))
             {
                 timer.Stop();
                 durationGame = (int)(timer.ElapsedMilliseconds / 1000);
@@ -175,13 +181,14 @@ namespace Client
                 {
                     PostEndGame();
                     saveGame();
+
+                    winform.Show();
+                    this.Visible = false;
+                    timer.Reset();
                 }
-                winform.Show();
-                this.Visible = false;
-                timer.Reset();
 
             }
-            if (!player1)
+            if (playerSoldiersLeft == 0 || ((technicalVictory) && (playerSoldiersLeft == 1)))
             {
                 timer.Stop();
                 durationGame = (int)(timer.ElapsedMilliseconds / 1000);
@@ -193,10 +200,11 @@ namespace Client
                 {
                     PostEndGame();
                     saveGame();
+
+                    winform.Show();
+                    this.Visible = false;
+                    timer.Reset();
                 }
-                winform.Show();
-                this.Visible = false;
-                timer.Reset();
 
             }
 
@@ -249,6 +257,7 @@ namespace Client
             serverPosStep2 = new PictureBox();
             GamePosition serverPos2 = null;
             int canMoove = 0;
+            int count = 0;
             if (currentPlayer == server)
             {
                 var anonymous = new { player = currentPlayer, board = Board };
@@ -261,6 +270,7 @@ namespace Client
                     {
                         GamePosition serverPos = await res.Content.ReadAsAsync<GamePosition>();
                         serverPosStep1 = buttons[serverPos.x, serverPos.y];
+                        count++;
                         if (serverPosStep1.Enabled)
                         {
                             OnFigurePress(serverPosStep1, e);
@@ -276,6 +286,7 @@ namespace Client
                                     if (serverPos2.status != -1)
                                     {
                                         serverPosStep2 = buttons[serverPos2.x, serverPos2.y];
+                                        count = 0;
                                         OnFigurePress(serverPosStep2, e);
                                         canMoove = 1;
 
@@ -289,6 +300,12 @@ namespace Client
                                 OnFigurePress(serverPosStep1, e);
                         }
                     }
+                    if((count > 10) && ((eatenBlack == 11)||(eatenWhite == 11)))
+                    {
+                        ResetGame(true);
+                        return;
+                    }
+
 
 
                 } while (serverPos2 == null || canMoove == 0);
@@ -528,22 +545,22 @@ namespace Client
             int i = startButton.Location.Y / cellSize + startIndexX;
             int j = startButton.Location.X / cellSize + startIndexY;
             //delete the eaten soldier
-            if (Board[i, j] == 1)//for updateing eaten White soldier
-            {
-                eatenWhite++;
-                this.ScoreLableWhite.Text = eatenWhite.ToString();
-
-            }
-            else//for updateing eaten Black soldier
-            {
-                eatenBlack++;
-                this.ScoreLableBlack.Text = eatenBlack.ToString();
-
-            }
+           
 
             while (currCount < count - 1)
             {
-               
+                if (Board[i, j] == 1)//for updateing eaten White soldier
+                {
+                    eatenWhite++;
+                    this.ScoreLableWhite.Text = eatenWhite.ToString();
+
+                }
+                else if (Board[i, j] == 2)
+                {
+                    eatenBlack++;
+                    this.ScoreLableBlack.Text = eatenBlack.ToString();
+
+                }
                 Board[i, j] = 0; // blank sqaure
                 buttons[i, j].Image = null; // no soldier
                 buttons[i, j].Text = ""; // no text
@@ -972,7 +989,7 @@ namespace Client
             this.Hide();
             restoreGames.Show();
         }
-        public async void restoredGameRun(Game gameRestore)
+        public  async void restoredGameRun(Game gameRestore)
         {
             Init();
             this.startButton.Enabled = false;
@@ -988,14 +1005,9 @@ namespace Client
             await Task.Delay(2000);
             foreach ((GamePosition, int) p in Positions)
             {
-         //       if(restoreGame)
-           //         await Task.Delay(3000);
                 PictureBox picturebox = new PictureBox();
                 picturebox = buttons[p.Item1.x, p.Item1.y];
-                OnFigurePress(picturebox, e);
-
-
-
+                OnFigurePress(picturebox, e); 
             }
             winform = new WinForm();
             winform.decalreTheWinner(game.Winner);
