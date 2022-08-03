@@ -12,7 +12,6 @@ namespace Client.Model
         public int Id { get; set; }
         public string Winner { get; set; }
         public DateTime Date { get; set; }
-        public int Board { get; set; }
         public string GameID { get; set; }
 
        

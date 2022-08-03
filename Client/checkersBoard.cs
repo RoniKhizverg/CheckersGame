@@ -63,6 +63,7 @@ namespace Client
             InitializeComponent();
             player = pl;
             restoreGame = false;
+            this.restoreGameBtn.Visible = false;
             whiteFigure = Properties.Resources.whiteSoldier;
             blackFigure = Properties.Resources.blackSoldier;
             blackCheatFigure = Properties.Resources.cheat;
@@ -82,6 +83,7 @@ namespace Client
         public checkersBoard(Player pl, Game gameRestore)
         {
             InitializeComponent();
+            this.restoreGameBtn.Visible = true;
             player = pl;
             restoreGame = true;
             whiteFigure = Properties.Resources.whiteSoldier;
@@ -116,7 +118,7 @@ namespace Client
             if (server == 2)
             {
                 nameTextBox2.Text = "server";
-                nameTextBox1.Text = player.Name;
+                nameTextBox1.Text = player.Name.Trim();
                 textBox3.Text = player.NumOfGames.ToString();
                 label3.Visible = false;
                 textBox1.Visible = false;
@@ -176,7 +178,7 @@ namespace Client
                 winner = player.Name;
                 endGame = true;
                 winform = new WinForm();
-                winform.decalreTheWinner(winner);
+                winform.decalreTheWinner(player);
                 if (!restoreGame)
                 {
                     PostEndGame();
@@ -195,7 +197,7 @@ namespace Client
                 winner = "server";
                 endGame = true;
                 winform = new WinForm();
-                winform.decalreTheWinner("server");
+                winform.decalreTheWinner(player,"server");
                 if (!restoreGame)
                 {
                     PostEndGame();
@@ -971,7 +973,6 @@ namespace Client
 
                 Winner = winner,
                 Date = DateTime.Now,
-                Board = 0,
                 GameID = guidStr,
             });
 
@@ -1010,7 +1011,11 @@ namespace Client
                 OnFigurePress(picturebox, e); 
             }
             winform = new WinForm();
-            winform.decalreTheWinner(game.Winner);
+            if(game.Winner == "server")
+                winform.decalreTheWinner(player,game.Winner);
+            else
+                winform.decalreTheWinner(player);
+
             winform.Show();
             this.Visible = false;
         }
@@ -1031,6 +1036,7 @@ namespace Client
         private void restoreGameBtn_Click(object sender, EventArgs e)
         {
             restoredGameRun(gameRestore);
+            this.restoreGameBtn.Visible = false;
         }
     }
 

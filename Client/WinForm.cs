@@ -15,15 +15,22 @@ namespace Client
         private Player player;
         public WinForm()
         {
+            player = new Player();
             InitializeComponent();
         }
 
          
-        public void decalreTheWinner(string winner)
+        public void decalreTheWinner(Player p)
         {
-            textBox1.Text = "The winner is " + winner + "\n congratulations!!!\n";
+            textBox1.Text = "The winner is " + p.Name.Trim() + " congratulations!!!\n";
+            player = p ;
         }
+        public void decalreTheWinner(Player p, String winner)
+        {
+            textBox1.Text = "The winner is " + winner + " congratulations!!!\n";
+            player = p;
 
+        }
         private void playAgainButton_Click(object sender, EventArgs e)
         {
             Form checkersBoard = new checkersBoard(player);

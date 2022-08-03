@@ -21,7 +21,8 @@ namespace Client
             this._player = player;
             InitializeComponent();
             var query = from c in _context.TblGames
-                        select new Game { GameID = c.GameID, Date = (DateTime)c.Date, Winner = c.Winner };
+                        where c.Winner == _player.Name
+                        select new Game { Id = c.Id,GameID = c.GameID, Date = (DateTime)c.Date, Winner = c.Winner.Trim() };
             var results = query.ToList();
             restoreDataGrid.DataSource = results;
             restoreDataGrid.Refresh();
@@ -34,19 +35,27 @@ namespace Client
 
         private void restoreGame_Click(object sender, EventArgs e)
         {
-            if (restoreDataGrid.SelectedCells == null) return;
-            DataGridViewRow selectedRow = restoreDataGrid.SelectedRows[0];
-            int Id = (int)selectedRow.Cells[0].Value;
-            string winner = (string)selectedRow.Cells[1].Value; ;
-            DateTime Date = (DateTime)selectedRow.Cells[2].Value; ;
-            int board = (int)selectedRow.Cells[3].Value;
-            string gameId = (string)selectedRow.Cells[4].Value;
-            Game gameObject = new Game { Id = Id,Winner = winner,Board = board,Date=Date,GameID = gameId };
+            try
+            {
+                if (restoreDataGrid.SelectedCells == null) return;
 
-            this.Hide();
-            checkersBoard checkersBoard = new checkersBoard(this._player, gameObject);
-            checkersBoard.Show();
-            this.Close();
+
+                DataGridViewRow selectedRow = restoreDataGrid.SelectedRows[0];
+                int Id = (int)selectedRow.Cells[0].Value;
+                string winner = (string)selectedRow.Cells[1].Value;
+                DateTime Date = (DateTime)selectedRow.Cells[2].Value;
+                string gameId = (string)selectedRow.Cells[3].Value;
+                Game gameObject = new Game { Id = Id, Winner = winner, Date = Date, GameID = gameId };
+
+                this.Hide();
+                checkersBoard checkersBoard = new checkersBoard(this._player, gameObject);
+                checkersBoard.Show();
+                this.Close();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please choose the entire row by clicking on the left side in the row");
+            }
         }
 
        

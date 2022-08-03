@@ -51,12 +51,15 @@
             // 
             // restoreDataGrid
             // 
+            this.restoreDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.restoreDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.restoreDataGrid.Location = new System.Drawing.Point(65, 12);
+            this.restoreDataGrid.GridColor = System.Drawing.SystemColors.Control;
+            this.restoreDataGrid.Location = new System.Drawing.Point(184, 38);
             this.restoreDataGrid.Name = "restoreDataGrid";
+            this.restoreDataGrid.ReadOnly = true;
             this.restoreDataGrid.RowHeadersWidth = 51;
             this.restoreDataGrid.RowTemplate.Height = 24;
-            this.restoreDataGrid.Size = new System.Drawing.Size(781, 409);
+            this.restoreDataGrid.Size = new System.Drawing.Size(602, 359);
             this.restoreDataGrid.TabIndex = 1;
             // 
             // restoreGame
@@ -64,7 +67,7 @@
             this.restoreGame.FlatAppearance.BorderColor = System.Drawing.Color.Maroon;
             this.restoreGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.restoreGame.Font = new System.Drawing.Font("Verdana", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.restoreGame.Location = new System.Drawing.Point(324, 462);
+            this.restoreGame.Location = new System.Drawing.Point(375, 463);
             this.restoreGame.Name = "restoreGame";
             this.restoreGame.Size = new System.Drawing.Size(225, 72);
             this.restoreGame.TabIndex = 2;
@@ -76,6 +79,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(961, 582);
             this.Controls.Add(this.restoreGame);
             this.Controls.Add(this.restoreDataGrid);

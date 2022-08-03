@@ -1,0 +1,222 @@
+﻿@page
+@model Server.Pages.QueriesModel
+
+@{
+    ViewData["Title"] = "Queries";
+}
+
+<script type="text/javascript">
+    const vars = window.location.search.substr(1);
+    if (vars) {
+        console.log(vars);
+        setTimeout(() => { showTable('pSelected');}, 500);
+        
+    }
+    function showTable(id) {
+        debugger
+        const tablesList = document.querySelectorAll('table');
+        [...tablesList].map((table) => {
+            if (table.id == id) table.style.display = 'block';
+            else table.style.display = 'none';
+        });
+    }
+    let deleteOpen = false;
+    function DeleteOptions() {
+        const deleteOp = document.getElementById('deleteOptions');
+        if (deleteOpen) {
+            deleteOp.style.display = 'none';
+            deleteOpen = false;
+        }
+        else {
+            deleteOp.style.display = 'block';
+            deleteOpen = true;
+        }
+    }
+</script>
+
+
+<h1 class="h1__spacing">Queries</h1>
+<div class="queriesHeader">
+    <input type="button" value="See All Players" class="btn-primary" onclick="showTable('allPlayers')" />
+    <input type="button" value="See All Games" class="btn-primary" onclick="showTable('allGames')" />
+    <input type="button" value="Player & NumOfGames" class="btn-primary" onclick="showTable('pGames')" />
+    <input type="button" value="Players with games desencding" class="btn-primary" onclick="showTable('DescTbl');" />
+    <button class="btn-danger" onclick="DeleteOptions()">Delete Options</button>
+    <form>
+        <select asp-for="SelectedUserName" asp-items="Model.PlayersNames">
+            <option value="">Select One</option>
+        </select>
+        <input type="submit" value="Select " class="btn-primary"  onsubmit="showTable('pSelected'); return false;"/>
+         </form>
+    
+    <div class="deleteOptions" style="display: none" id="deleteOptions">
+        <form method="post" name="deletePlayer">
+            <p><b>Delete a Player:</b></p>
+            <input type="text" asp-for="UserID" />
+            <input type="submit" value="Delete" class="btn btn-danger" asp-page-handler="Delete" />
+        </form>
+        <form method="post" name="deleteGame">
+            <p><b>Delete a Game:</b></p>
+            <input type="text" asp-for="GameID" />
+            <input type="submit" value="Delete" class="btn btn-danger" asp-page-handler="GameDelete" />
+        </form>
+    </div>
+
+    @*Tables:*@
+    @*All Players*@
+    <div class="tables">
+        <table class="table" id="allPlayers" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlayersList[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlayersList[0].NumOfGames)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PlayersList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumOfGames)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @*All Games*@
+        <table class="table" id="allGames" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GamesList[0].Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GamesList[0].UserId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GamesList[0].Winner)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GamesList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Winner)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @*Selected Player*@
+    <table class="table" id="pSelected" style="display:none">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PlayerGames[0].Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PlayerGames[0].Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PlayerGames[0].Winner)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PlayerGames[0].UserId)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PlayerGames)
+            {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Winner)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+    </tr>            }
+        </tbody>
+    </table>
+        @*Player & NumOfGames*@
+        <table class="table" id="pGames" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlayersList[0].NumOfGames)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlayersList[0].Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PlayersList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumOfGames)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        @*Players with games desencding*@
+        <table class="table" id="DescTbl" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DescPlayers[0].NumOfGames)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DescPlayers[0].Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DescPlayers)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumOfGames)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
