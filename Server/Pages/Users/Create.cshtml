@@ -24,9 +24,10 @@
                 <span asp-validation-for="TblUsers.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TblUsers.NumOfGames" class="control-label"></label>
-                <input asp-for="TblUsers.NumOfGames" class="form-control" />
-                <span asp-validation-for="TblUsers.NumOfGames" class="text-danger"></span>
+                <label asp-for="TblUsers.Id"class="control-label"></label>
+                <input asp-for="TblUsers.Id"value="1"min="1"max="1000"  class="form-control" />
+                <span asp-validation-for="TblUsers.Id" class="text-danger"></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="TblUsers.PhoneNumber" class="control-label"></label>
@@ -46,4 +47,19 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <head>
+    <script type="text/javascript">
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"].Errors.Count > 0)
+        {
+            <text>
+            $(document).ready(function() {
+                alert('@ViewData.ModelState["Error"].Errors.First().ErrorMessage');
+            });
+            </text>
+        }
+    </script>
+</head>
+    
 }
+
+        

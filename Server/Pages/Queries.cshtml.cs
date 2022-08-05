@@ -79,8 +79,8 @@ namespace Server.Pages
             DescPlayers = PlayersList.OrderByDescending(p => p.NumOfGames).ToList();
             gamesWithoutDuplicate = GamesList.Distinct(new myEq()).ToList();
             allDates = await query2.Distinct().ToListAsync();
-            playersWithLastGamesPlay = Q(allDates).ToList();
-            playersWithLastGamesPlay = playersWithLastGamesPlay.OrderByDescending(an => an.Name.Trim(), StringComparer.Ordinal).ToList();
+            playersWithLastGamesPlay = Q().ToList();
+           playersWithLastGamesPlay = playersWithLastGamesPlay.OrderByDescending(an => an.Name.Trim(), StringComparer.Ordinal).ToList();
             foreach (TblGames g in GamesList)
             {
                 if (g.UserId == SelectedUser.Id)
@@ -91,17 +91,15 @@ namespace Server.Pages
             
         }
 
-        public IList<userWithDate>Q(IList<DateTime> allDates)
+        public IList<userWithDate>Q()
         {
             var x =
-                from g in GamesList
-                from u in PlayersList
-                where g.UserId == u.Id
-                let d = g.Date
-                orderby d  descending
-                select new userWithDate { Name = u.Name.Trim(), date = d};
+                 from g in GamesList
+                 group g by g.UserName into p
+                 select new userWithDate { Name = p.Key, date = p.Max(p=>p.Date) };
             return x.ToList();
         }
+    
 
         public async Task OnGetPlayerAsync(string SelectedUserName)
         {

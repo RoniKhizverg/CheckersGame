@@ -311,3 +311,4 @@ C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debu
 C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Server.pdb
 C:\Users\RoniKhizverg\Documents\GitHub\CheckersGame\CheckersGame\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache
 C:\Users\oramr\Documents\GitHub\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Pages\Queries.cshtml.g.cs
+C:\Users\oramr\Documents\GitHub\CheckersGame\Server\obj\Debug\netcoreapp3.1\Razor\Pages\Developers.cshtml.g.cs

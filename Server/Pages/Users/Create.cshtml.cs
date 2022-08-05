@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Model;
 
@@ -35,7 +36,13 @@ namespace Server.Pages.Users
             {
                 return Page();
             }
-
+           
+            var user = await _context.TblUsers.FirstOrDefaultAsync(s => s.Id == TblUsers.Id);
+            if (user != null)
+            {
+                 ModelState.AddModelError("Error", "this ID is already exist");
+                return Page();
+            }
             _context.TblUsers.Add(TblUsers);
             await _context.SaveChangesAsync();
 

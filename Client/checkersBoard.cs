@@ -913,15 +913,7 @@ namespace Client
         {
             this.btnGamesList.Visible = false;
             ActivateAllButtons();
-            player.NumOfGames++;
-            string apiPath = $"api/TblUsers/updateGame?id={player.Id}";
-            this.startButton.Visible = false;
-            HttpResponseMessage res = await client.PutAsJsonAsync(apiPath, 0);
-            if (!res.IsSuccessStatusCode)
-            {
-                MessageBox.Show($"{res.Content.ToString()}");
-                this.Close();
-            }
+            
 
             if (currentPlayer == 2)
             {
@@ -939,21 +931,34 @@ namespace Client
 
         private async void PostEndGame()
         {
+            player.NumOfGames++;
+            string apiPathUpdatingGames = $"api/TblUsers/updateGame?id={player.Id}";
+            this.startButton.Visible = false;
+            HttpResponseMessage res1 = await client.PutAsJsonAsync(apiPathUpdatingGames, 0);
+            if (!res1.IsSuccessStatusCode)
+            {
+                MessageBox.Show($"{res1.Content.ToString()}");
+                this.Close();
+            }
+
             string apiPath = "api/TblGames";
             string jsonData = @"{
             'Date': '',
             'Winner': '',
             'UserId': '',
             'DurationGame':'',
+            'UserName':'',
             }";
             dynamic data = JObject.Parse(jsonData);
             data.Date = DateTime.Now;
             data.Winner = winner;
             data.UserId = player.Id;
             data.DurationGame = durationGame;
+            data.UserName = player.Name;
+
             var httpContent = new StringContent($"{data}", Encoding.UTF8, "application/json");
-            HttpResponseMessage res = await client.PostAsync(apiPath, httpContent);
-            if (res.IsSuccessStatusCode)
+            HttpResponseMessage res2 = await client.PostAsync(apiPath, httpContent);
+            if (res2.IsSuccessStatusCode)
             {
                 return;
             }
@@ -970,7 +975,6 @@ namespace Client
 
             _context.TblGames.InsertOnSubmit(new TblGame
             {
-
                 Winner = winner,
                 Date = DateTime.Now,
                 GameID = guidStr,

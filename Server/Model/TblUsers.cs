@@ -3,6 +3,7 @@ namespace Server.Model
 {
     public class TblUsers
     {
+        [Range(1, 1000, ErrorMessage = "Please Enter id between 0 to 1000")]
         public int Id { get; set; }
 
         [StringLength(60, MinimumLength = 2, ErrorMessage = "UserName is too short, min length is {2}")]
@@ -15,9 +16,9 @@ namespace Server.Model
         public string Password { get; set; }
 
         public int NumOfGames { get; set; }
-        [Range(0500000000, 9999999999, ErrorMessage = "Enter number between 0 to 1000")]
+        [Range(0500000000, 9999999999, ErrorMessage = "phone number must be 10 digits")]
         [DataType(DataType.PhoneNumber)]
-        public decimal PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
 
     }

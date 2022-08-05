@@ -12,5 +12,8 @@ namespace Server.Model
 
         public int UserId { get; set; }
         public int DurationGame { get; set; }
+
+        public string UserName { get; set; }
+
     }
 }
