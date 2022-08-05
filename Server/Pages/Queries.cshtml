@@ -37,10 +37,14 @@
 
 <h1 class="h1__spacing">Queries</h1>
 <div class="queriesHeader">
-    <input type="button" value="See All Players" class="btn-primary" onclick="showTable('allPlayers')" />
+    <input type="button" value="Players With Names Descending" class="btn-primary" onclick="showTable('PlayersWithNamesDescending')" />
+    <input type="button" value="Players With Names Ascending" class="btn-primary" onclick="showTable('PlayersWithNamesAscending');" />
+     <input type="button" value="Show Games WithOut Duplicate" class="btn-primary" onclick="showTable('ShowGamesWithOutDuplicate')" />
+    <input type="button" value="Show Players Last Games" class="btn-primary" onclick="showTable('showPlayersWithLastDate')" />
     <input type="button" value="See All Games" class="btn-primary" onclick="showTable('allGames')" />
     <input type="button" value="Player & NumOfGames" class="btn-primary" onclick="showTable('pGames')" />
     <input type="button" value="Players with games desencding" class="btn-primary" onclick="showTable('DescTbl');" />
+
     <button class="btn-danger" onclick="DeleteOptions()">Delete Options</button>
     <form>
         <select asp-for="SelectedUserName" asp-items="Model.PlayersNames">
@@ -48,6 +52,8 @@
         </select>
         <input type="submit" value="Select " class="btn-primary"  onsubmit="showTable('pSelected'); return false;"/>
          </form>
+
+        
     
     <div class="deleteOptions" style="display: none" id="deleteOptions">
         <form method="post" name="deletePlayer">
@@ -63,22 +69,28 @@
     </div>
 
     @*Tables:*@
-    @*All Players*@
+       @*All players With Names Ascending with no case sensitive*@
     <div class="tables">
-        <table class="table" id="allPlayers" style="display:none">
+        <table class="table" id="PlayersWithNamesAscending" style="display:none">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.PlayersList[0].Name)
+                        @Html.DisplayNameFor(model => model.SortAscPlayers[0].Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.PlayersList[0].NumOfGames)
+                        @Html.DisplayNameFor(model => model.SortAscPlayers[0].NumOfGames)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SortAscPlayers[0].Password)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SortAscPlayers[0].PhoneNumber)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.PlayersList)
+                @foreach (var item in Model.SortAscPlayers)
                 {
                     <tr>
                         <td>
@@ -86,6 +98,53 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.NumOfGames)
+                        </td>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.Password)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+       @*All players With Names Descending with no case sensitive*@
+    <div class="tables">
+        <table class="table" id="PlayersWithNamesDescending" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SortDescPlayers[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SortDescPlayers[0].NumOfGames)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.SortDescPlayers[0].Password)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SortDescPlayers[0].PhoneNumber)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.SortDescPlayers)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumOfGames)
+                        </td>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.Password)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
                         </td>
                     </tr>
                 }
@@ -104,6 +163,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.GamesList[0].Winner)
                     </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.GamesList[0].DurationGame)
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -119,6 +181,49 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Winner)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DurationGame)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+         @*All Games without duplicate*@
+        <table class="table" id="ShowGamesWithOutDuplicate" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].UserId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].Winner)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].DurationGame)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.gamesWithoutDuplicate)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Winner)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DurationGame)
                         </td>
                     </tr>
                 }
@@ -190,6 +295,25 @@
             </tbody>
         </table>
 
+         @*Player & NumOfGames*@
+        <table class="table" id="showPlayersWithLastDate" style="display:none">
+            <thead>
+                <tr>
+                    <th>
+                       
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model =>model.date)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+               
+            </tbody>
+        </table>
+
 
         @*Players with games desencding*@
         <table class="table" id="DescTbl" style="display:none">
@@ -200,6 +324,12 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.DescPlayers[0].Name)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.DescPlayers[0].Password)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DescPlayers[0].PhoneNumber)
                     </th>
                     <th></th>
                 </tr>
@@ -213,6 +343,12 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.Password)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
                         </td>
                     </tr>
                 }

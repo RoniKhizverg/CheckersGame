@@ -36,6 +36,7 @@ namespace Server.Pages
         public TblUsers SelectedUser { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SelectedUserName { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public int UserID { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -43,10 +44,29 @@ namespace Server.Pages
 
         [BindProperty(SupportsGet = true)]
         public IList<TblGames> PlayerGames { get; set; }
+
+        public IList<TblUsers> SortAscPlayers { get; set; }
+
+        public IList<TblUsers> SortDescPlayers { get; set; }
+
+        public IList<TblGames> gamesWithoutDuplicate { get; set; }
+
+
+       public IList<userWithDate> playersWithLastGamesPlay { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime date { get; set; }
+
+        public IList<DateTime> allDates { get; set; }
+
+
         public async Task OnGetAsync()
         {
             var query = from m in _usersServerContext.TblUsers
                         select m.Name;
+            var query2 = from g in _gamesServerContext.TblGames
+                        select g.Date;
             if (!string.IsNullOrEmpty(SelectedUserName))
             {
                 SelectedUser = await _usersServerContext.TblUsers.FirstOrDefaultAsync(s => s.Name == SelectedUserName);
@@ -54,7 +74,13 @@ namespace Server.Pages
             PlayersNames = new SelectList(await query.Distinct().ToListAsync());
             PlayersList = await _usersServerContext.TblUsers.ToListAsync();
             GamesList = await _gamesServerContext.TblGames.ToListAsync();
+            SortAscPlayers = PlayersList.OrderBy(p => p.Name.ToLower()).ToList();
+            SortDescPlayers = PlayersList.OrderByDescending(p => p.Name.ToLower()).ToList();
             DescPlayers = PlayersList.OrderByDescending(p => p.NumOfGames).ToList();
+            gamesWithoutDuplicate = GamesList.Distinct(new myEq()).ToList();
+            allDates = await query2.Distinct().ToListAsync();
+            playersWithLastGamesPlay = Q(allDates).ToList();
+            playersWithLastGamesPlay = playersWithLastGamesPlay.OrderByDescending(an => an.Name.Trim(), StringComparer.Ordinal).ToList();
             foreach (TblGames g in GamesList)
             {
                 if (g.UserId == SelectedUser.Id)
@@ -62,7 +88,19 @@ namespace Server.Pages
                     PlayerGames.Add(g);
                 }
             }
+            
+        }
 
+        public IList<userWithDate>Q(IList<DateTime> allDates)
+        {
+            var x =
+                from g in GamesList
+                from u in PlayersList
+                where g.UserId == u.Id
+                let d = g.Date
+                orderby d  descending
+                select new userWithDate { Name = u.Name.Trim(), date = d};
+            return x.ToList();
         }
 
         public async Task OnGetPlayerAsync(string SelectedUserName)
@@ -150,5 +188,24 @@ namespace Server.Pages
         {
             return _usersServerContext.TblUsers.Any(e => e.Id == id);
         }
+    }
+
+    
+    internal class myEq : IEqualityComparer<TblGames>
+    {
+        public bool Equals(TblGames game1, TblGames game2)
+        {
+            return game1.UserId == game2.UserId;
+        }
+        public int GetHashCode(TblGames game)
+        {
+            return game.UserId.GetHashCode();
+
+        }
+    }
+    public class userWithDate
+    {
+        public string Name { get; set; }
+        public DateTime date { get; set; }
     }
 }
