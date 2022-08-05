@@ -909,12 +909,13 @@ namespace Client
             this.Close();
         }
 
-        private async void startButton_ClickAsync(object sender, EventArgs e)
+        private  void startButton_ClickAsync(object sender, EventArgs e)
         {
             this.btnGamesList.Visible = false;
-            ActivateAllButtons();
-            
+            this.startButton.Visible = false;
 
+            ActivateAllButtons();
+        
             if (currentPlayer == 2)
             {
                 currentPlayer = server;
@@ -933,7 +934,6 @@ namespace Client
         {
             player.NumOfGames++;
             string apiPathUpdatingGames = $"api/TblUsers/updateGame?id={player.Id}";
-            this.startButton.Visible = false;
             HttpResponseMessage res1 = await client.PutAsJsonAsync(apiPathUpdatingGames, 0);
             if (!res1.IsSuccessStatusCode)
             {
