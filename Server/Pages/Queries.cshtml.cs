@@ -71,7 +71,7 @@ namespace Server.Pages
             {
                 SelectedUser = await _usersServerContext.TblUsers.FirstOrDefaultAsync(s => s.Name == SelectedUserName);
             }
-            PlayersNames = new SelectList(await query.Distinct().ToListAsync());
+            PlayersNames = new SelectList(await query.ToListAsync());
             PlayersList = await _usersServerContext.TblUsers.ToListAsync();
             GamesList = await _gamesServerContext.TblGames.ToListAsync();
             SortAscPlayers = PlayersList.OrderBy(p => p.Name.ToLower()).ToList();

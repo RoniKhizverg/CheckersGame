@@ -170,6 +170,9 @@
                         @Html.DisplayNameFor(model => model.GamesList[0].Id)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.GamesList[0].UserName)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.GamesList[0].Date)
                     </th>
                     <th>
@@ -190,6 +193,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Date)
@@ -216,6 +222,9 @@
                         @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].Id)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].UserName)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.gamesWithoutDuplicate[0].Date)
                     </th>
                     <th>
@@ -236,6 +245,9 @@
                     <tr>
                          <td>
                             @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Date)
@@ -260,6 +272,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.PlayerGames[0].Id)
                 </th>
+                 <th>
+                    @Html.DisplayNameFor(model => model.PlayerGames[0].UserName)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.PlayerGames[0].Date)
                 </th>
@@ -278,6 +293,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Date)

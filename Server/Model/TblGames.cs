@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Server.Model
 {
@@ -12,7 +13,7 @@ namespace Server.Model
 
         public int UserId { get; set; }
         public int DurationGame { get; set; }
-
+        [Display(Name="Player Name")]
         public string UserName { get; set; }
 
     }

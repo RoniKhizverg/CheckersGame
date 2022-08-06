@@ -16,7 +16,7 @@ namespace Server.Model
         public string Password { get; set; }
 
         public int NumOfGames { get; set; }
-        [Range(0500000000, 9999999999, ErrorMessage = "phone number must be 10 digits")]
+        [Range(0500000000, 999999999, ErrorMessage = "phone number must be 10 digits")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
