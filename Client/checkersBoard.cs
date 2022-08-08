@@ -91,8 +91,6 @@ namespace Client
             blackCheatFigure = Properties.Resources.cheat;
             whiteCheatFigure = Properties.Resources.whiteCheat;
             this.startButton.Visible = false;
-            ScoreLableBlack.Visible = false;
-            ScoreLableWhite.Visible = false;
             this.Text = "Checkers";
             if (client.BaseAddress == null)
             {
@@ -447,7 +445,7 @@ namespace Client
                         ShowPossibleSteps();
                         isContinue = false;
                         prevButton = pressedButton;
-                        if (!endGame)
+                        if (!endGame && !restoreGame)
                             checkIfServerTurnAsync();
                         if (currentPlayer == server)
                             isServerTurn = true;
@@ -1010,9 +1008,11 @@ namespace Client
             await Task.Delay(2000);
             foreach ((GamePosition, int) p in Positions)
             {
+                await Task.Delay(500);
                 PictureBox picturebox = new PictureBox();
                 picturebox = buttons[p.Item1.x, p.Item1.y];
-                OnFigurePress(picturebox, e); 
+                OnFigurePress(picturebox, e);
+
             }
             winform = new WinForm();
             if(game.Winner == "server")
