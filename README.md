@@ -14,4 +14,4 @@ Developed by Or Amram and Roni Khizverg .
 
 ### Video
 
-[![Checkers Game](https://img.youtu.be/8vdxVruE0Xw/0.jpg)](https://youtu.be/8vdxVruE0Xw "Checkers Game")
+[![Checkers Game](https://img.youtube.com/vi/8vdxVruE0Xw/0.jpg)](https://youtu.be/8vdxVruE0Xw "Checkers Game")
