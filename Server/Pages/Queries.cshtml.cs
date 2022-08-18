@@ -65,8 +65,7 @@ namespace Server.Pages
         {
             var query = from m in _usersServerContext.TblUsers
                         select m.Name;
-            var query2 = from g in _gamesServerContext.TblGames
-                        select g.Date;
+            
             if (!string.IsNullOrEmpty(SelectedUserName))
             {
                 SelectedUser = await _usersServerContext.TblUsers.FirstOrDefaultAsync(s => s.Name == SelectedUserName);
@@ -78,7 +77,6 @@ namespace Server.Pages
             SortDescPlayers = PlayersList.OrderByDescending(p => p.Name.ToLower()).ToList();
             DescPlayers = PlayersList.OrderByDescending(p => p.NumOfGames).ToList();
             gamesWithoutDuplicate = GamesList.Distinct(new myEq()).ToList();
-            allDates = await query2.Distinct().ToListAsync();
             playersWithLastGamesPlay = Q().ToList();
            playersWithLastGamesPlay = playersWithLastGamesPlay.OrderByDescending(an => an.Name.Trim(), StringComparer.Ordinal).ToList();
             foreach (TblGames g in GamesList)

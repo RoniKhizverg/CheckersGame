@@ -246,7 +246,7 @@ namespace Client
             currentPlayer = currentPlayer == 1 ? 2 : 1;
             ResetGame();
         }
-        public async void checkIfServerTurnAsync()
+        public async void serverTurnAsync()
         {
             string apiPath2 = $"api/TblGames/turn";
             string apiPath = $"api/TblGames/raffle";
@@ -263,6 +263,7 @@ namespace Client
                 var anonymous = new { player = currentPlayer, board = Board };
                 do
                 {
+                    //in the first time the server raffle step.
                     HttpResponseMessage res = await client.PostAsJsonAsync(apiPath, anonymous);
 
                     res.EnsureSuccessStatusCode();
@@ -279,6 +280,7 @@ namespace Client
                             {
                                 var board = new { board = Board };
                                 HttpResponseMessage res2 = await client.PostAsJsonAsync(apiPath2, board);
+                                //the location to which it is transferred
 
                                 if (res2.IsSuccessStatusCode)
                                 {
@@ -350,34 +352,35 @@ namespace Client
             //we check if the pressed picturebox is not blank square and the soldier belongs to player 
             if (Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] != 0 && Board[pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize] == currentPlayer)
             {
-                ClearSteps();
+                ClearSteps();// clear the previous optinal steps
                 clearYellowCells();
                 pressedButton.BackColor = Color.Gray; // sign the picturebox pressed.
                 DeactivateAllButtons(); // deactivate all the picturebox except the pressed button
                 pressedButton.Enabled = true;
                 countEatSteps = 0;
                 if (pressedButton.Text == "D")
-                    ShowSteps(pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize, false);
-                else ShowSteps(pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize);
-               
+                    ShowSteps(pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize, false);//activate the yellow squares if is a cheat
+                else ShowSteps(pressedButton.Location.Y / cellSize, pressedButton.Location.X / cellSize);//activate the yellow squares if is not a cheat
+
                 // enable us to press again on the same sqaure pressed              
                 if (isMoving)
                 {
                     ClearSteps();
                     clearYellowCells();
                     pressedButton.BackColor = GetPrevButtonColor(pressedButton);
-                    ShowPossibleSteps();
+                    ShowPossibleSteps(); //for activating buttons.
                     isMoving = false;
                 }
                 else
 
                     isMoving = true;
             }
-            // ןf we did a legal step.
+            // if we did a legal step.
             else
             {
                 if (isMoving)
                 {
+                    //save the steps in to Positions List
                     if (!restoreGame)
                     {
                         if (Positions.Count != 0)
@@ -410,7 +413,6 @@ namespace Client
                         isContinue = true; // we have one more step!! (:
                         DeleteEaten(pressedButton, prevButton); // delete the eaten soldier
                        
-
                     }
                     if (currentPlayer == server || restoreGame)
                        System.Threading.Thread.Sleep(2000);
@@ -442,11 +444,11 @@ namespace Client
                         ClearSteps();
                         clearYellowCells();
                         SwitchPlayer();
-                        ShowPossibleSteps();
+                        ShowPossibleSteps();//for activating buttons.
                         isContinue = false;
                         prevButton = pressedButton;
                         if (!endGame && !restoreGame)
-                            checkIfServerTurnAsync();
+                            serverTurnAsync();
                         if (currentPlayer == server)
                             isServerTurn = true;
 
@@ -549,7 +551,7 @@ namespace Client
 
             while (currCount < count - 1)
             {
-                if (Board[i, j] == 1)//for updateing eaten White soldier
+                if (Board[i, j] == 1)//for updating eaten White soldier
                 {
                     eatenWhite++;
                     this.ScoreLableWhite.Text = eatenWhite.ToString();
@@ -917,16 +919,12 @@ namespace Client
             if (currentPlayer == 2)
             {
                 currentPlayer = server;
-                checkIfServerTurnAsync();
+                serverTurnAsync();
             }
         }
 
 
-        private void checkersBoard_Load(object sender, EventArgs e)
-        {
-
-        }
-
+       
 
         private async void PostEndGame()
         {

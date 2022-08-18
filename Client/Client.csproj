@@ -158,7 +158,6 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Cell.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\GamePosition.cs" />
     <Compile Include="Model\Player.cs" />

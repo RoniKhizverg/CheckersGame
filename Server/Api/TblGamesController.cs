@@ -96,7 +96,7 @@ namespace Server.Api
         {
             TurnPos turnPos = new TurnPos();
             var random = new Random();
-            var annonymousObject = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));
+            var annonymousObject = Newtonsoft.Json.JsonConvert.DeserializeObject(Convert.ToString(data));//convert to string for using 'data'
             int randX;
             int randY;
             do
